@@ -13,5 +13,12 @@ class CaixaItem extends Model
         'acrescimo', 'valorapagar', 'formadepagamento'
     ];
 
+    public function qrcode()
+{
+    return $this->belongsTo(\App\Models\QRCode::class, 'qrcode_id');
+}
+
+
     public $timestamps = true;
 }
+

@@ -26,4 +26,10 @@ class QRCode extends Model
     {
         return !is_null($this->used_at);
     }
+
+    public function caixaItem()
+{
+    return $this->hasOne(\App\Models\CaixaItem::class, 'qrcode_id');
+}
+
 }

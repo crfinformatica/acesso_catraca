@@ -398,30 +398,57 @@
 <!-- Modal -->
 <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form method="POST" action="{{ route('qrcode.gerar') }}">
-      @csrf
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalQrCodeLabel">Gerar QR Code para Produto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="produto_id" class="form-label">Selecione o Produto</label>
-            <select name="produto_id" id="produto_id" class="form-control" required>
-              <option value="" disabled selected>Escolha um produto</option>
-              @foreach ($produtos as $produto)
-                <option value="{{ $produto->idproduto }}">{{ $produto->descricao }}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Gerar QR Code</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
+   <form method="POST" action="{{ route('qrcode.gerar') }}">
+  @csrf
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Gerar QR Code para Produto</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">
+        <label for="produto_id" class="form-label">Produto</label>
+        <select name="produto_id" id="produto_id" class="form-control" required>
+          <option value="" disabled selected>Escolha um produto</option>
+          @foreach ($produtos as $produto)
+            <option value="{{ $produto->idproduto }}">{{ $produto->descricao }}</option>
+          @endforeach
+        </select>
       </div>
-    </form>
+
+      <div class="mb-3">
+    <label for="valor" class="form-label">Valor</label>
+    <input type="number" step="0.01" name="valor" id="valor" class="form-control" required>
+  </div>
+
+
+      <div class="mb-3">
+        <label for="desconto" class="form-label">Desconto (R$)</label>
+        <input type="number" step="0.01" name="desconto" id="desconto" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
+        <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
+        <select name="formadepagamento" id="formadepagamento" class="form-control" required>
+          <option value="" disabled selected>Escolha a forma de pagamento</option>
+          <option value="dinheiro">Dinheiro</option>
+          <option value="pix">Pix</option>
+          <option value="cartao">Cartão</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Gerar QR Code</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+  </div>
+</form>
+
   </div>
 </div>
 
@@ -453,7 +480,7 @@
       </td>
       <td>{{ $qr->user->name ?? '---' }}</td>
       <td>{{ $qr->produto->descricao ?? '---' }}</td>
-      <td>R$ {{ number_format($qr->produto->valor ?? 0, 2, ',', '.') }}</td>
+      <td>R$ {{ number_format($qr->caixaItem->valorapagar ?? 0, 2, ',', '.') }}</td>
       <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
       <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td>
     </tr>
