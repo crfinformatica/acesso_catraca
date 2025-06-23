@@ -408,19 +408,21 @@
     <div class="modal-body">
       <div class="mb-3">
         <label for="produto_id" class="form-label">Produto</label>
-        <select name="produto_id" id="produto_id" class="form-control" required>
+       <select name="produto_id" class="form-control" id="produto_id" class="form-select" required>
           <option value="" disabled selected>Escolha um produto</option>
           @foreach ($produtos as $produto)
-            <option value="{{ $produto->idproduto }}">{{ $produto->descricao }}</option>
+            <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}">
+              {{ $produto->descricao }}
+            </option>
           @endforeach
         </select>
+
       </div>
 
-      <div class="mb-3">
-    <label for="valor" class="form-label">Valor</label>
-    <input type="number" step="0.01" name="valor" id="valor" class="form-control" required>
-  </div>
-
+     <div class="mb-3">
+  <label for="valor_produto" class="form-label">Valor do Produto</label>
+  <input type="text" id="valor_produto" class="form-control" readonly>
+</div>
 
       <div class="mb-3">
         <label for="desconto" class="form-label">Desconto (R$)</label>
@@ -491,13 +493,6 @@
     </div>
 
 
-
-
-
-
-
-
-
     <!-- right col -->
   </div>
   <!-- /.row (main row) -->
@@ -533,6 +528,22 @@ document.querySelectorAll('.botao-produto').forEach(botao => {
   <!-- ./wrapper -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectProduto = document.getElementById('produto_id');
+    const inputValor = document.getElementById('valor_produto');
+
+    selectProduto.addEventListener('change', function () {
+      const valor = this.options[this.selectedIndex].getAttribute('data-valor');
+      if (valor) {
+        inputValor.value = 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
+      } else {
+        inputValor.value = '';
+      }
+    });
+  });
+</script>
 
   <!-- DataTables Config -->
   <script>
