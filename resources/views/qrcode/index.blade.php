@@ -573,12 +573,12 @@
             <tr>
               <th>QRcode</th>
               <th>Cliente</th>
-              <th>Gerador por:</th>
-              <th>Status</th>
-              <th>Produto</th>
               <th>valor</th>
+              <th>Produto</th>
+              <th>Status</th>
+              <th>Gerador por:</th>
               <th>Data de Uso</th>
-              <th>Criado em</th>
+              <!-- <th>Criado em</th> -->
               <th>Ação</th>
             </tr>
           </thead>
@@ -591,24 +591,24 @@
     <button class="btn-custom" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">Imprimir</button>
   </td>
   <td> {{ $qr->cliente->nome ?? '---' }}</td>
-  <td>{{ $qr->user->name ?? '---' }}</td>
   <td>
-    @if ($qr->used_at)
-    <span class="badge badge-danger">Usado</span>
+    @if(empty($qr->caixaItem->valorapagar))
+    <span class="badge badge-danger">Pendente</span>
     @else
-    <span class="badge badge-success">Disponível</span>
+    R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
     @endif
   </td>
   <td>{{ $qr->produto->descricao ?? '---' }}</td>
         <td>
-          @if(empty($qr->caixaItem->valorapagar))
-            <span class="badge badge-danger">Pendente</span>
+          @if ($qr->used_at)
+          <span class="badge badge-danger">Usado</span>
           @else
-            R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
+          <span class="badge badge-success">Disponível</span>
           @endif
         </td>
+        <td>{{ $qr->user->name ?? '---' }}</td>
       <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
-      <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td>
+      <!-- <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td> -->
     </tr>
   @endforeach
 </tbody>
