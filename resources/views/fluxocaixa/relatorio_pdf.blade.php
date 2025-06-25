@@ -75,21 +75,25 @@
 <table>
     <thead>
         <tr>
+            <th>Filial</th>
             <th>Data</th>
             <th>Tipo</th>
-            <th>Valor (R$)</th>
-            <th>Filial</th>
             <th>Descrição</th>
+            <th>Valor (R$)</th>
+            
+            
         </tr>
     </thead>
     <tbody>
         @forelse($lancamentos as $item)
             <tr>
+                <td>{{ $item->filial->nomedafilial ?? 'N/A' }}</td>
                 <td>{{ \Carbon\Carbon::parse($item->dataregistro)->format('d/m/Y') }}</td>
                 <td>{{ $item->tipo }}</td>
-                <td style="text-align:right;">{{ number_format($item->valor, 2, ',', '.') }}</td>
-                <td>{{ $item->filial->nome ?? 'N/A' }}</td>
                 <td>{{ $item->descricao }}</td>
+                <td style="text-align:right;">{{ number_format($item->valor, 2, ',', '.') }}</td>
+                
+                
             </tr>
         @empty
             <tr>

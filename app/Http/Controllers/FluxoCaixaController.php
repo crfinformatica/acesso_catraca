@@ -61,6 +61,7 @@ class FluxoCaixaController extends Controller
         }
 
         $lancamentos = $query->orderBy('dataregistro')->get();
+        
         $filiais = Filial::all();
 
         return view('fluxocaixa.relatorio', compact('lancamentos', 'filiais', 'request'));
