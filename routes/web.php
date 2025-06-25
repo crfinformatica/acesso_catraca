@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     // API local da catraca
     Route::get('/api/catraca/verificar/{uuid}', [AcessoController::class, 'verificar']);
-   
+
 
 
     // Teste de GD
@@ -53,13 +53,16 @@ Route::middleware(['auth'])->group(function () {
         return $response->json();
     });
 
-     // Forma de pagamento
+    // Forma de pagamento
     Route::get('/formapagamento.index', [QRCodeController::class, 'index'])->name('formapagamento.index');
 
     // Cadastros
     Route::resource('filiais', FilialController::class);
     Route::resource('produtos', ProdutoController::class);
-    
+
     // FLUXO DE CAIXA
-    Route::resource('fluxocaixa',FluxoCaixaController::class);
+    Route::resource('fluxocaixa', FluxoCaixaController::class);
+    Route::get('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorio'])->name('fluxocaixa.relatorio');
+    Route::post('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorioResultado'])->name('fluxocaixa.relatorio.resultado');
+
 }); // <-- fechamento do grupo de rotas

@@ -45,6 +45,32 @@ class FluxoCaixaController extends Controller
 
         return redirect()->route('fluxocaixa.index')->with('success', 'Movimento registrado com sucesso!');
     }
+    public function relatorio()
+    {
+        $filiais = Filial::all();
+        return view('fluxocaixa.relatorio', compact('filiais'));
+    }
+    public function relatorioResultado(Request $request)
+{
+    $request->validate([
+        'idfilial' => 'nullable|exists:filiais,id',
+        'data_inicio' => 'required|date',
+        'data_fim' => 'required|date|after_or_equal:data_inicio',
+    ]);
+
+    $query = FluxoCaixa::with('filial')
+        ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
+
+    if ($request->idfilial) {
+        $query->where('idfilial', $request->idfilial);
+    }
+
+    $lancamentos = $query->orderBy('dataregistro')->get();
+
+    $filiais = Filial::all();
+    return view('fluxocaixa.relatorio', compact('lancamentos', 'filiais', 'request'));
+}
+
 
     // (outros métodos como index, edit, update etc.)
 }
