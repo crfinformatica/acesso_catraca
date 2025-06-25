@@ -81,102 +81,6 @@
             </form>
           </div>
         </li>
-
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-comments"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can...</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
-        <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-bell"></i>
-            <span class="badge badge-warning navbar-badge">15</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span class="dropdown-item dropdown-header">15 Notifications</span>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-envelope mr-2"></i> 4 new messages
-              <span class="float-right text-muted text-sm">3 mins</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-users mr-2"></i> 8 friend requests
-              <span class="float-right text-muted text-sm">12 hours</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-file mr-2"></i> 3 new reports
-              <span class="float-right text-muted text-sm">2 days</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-            <i class="fas fa-expand-arrows-alt"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
-            <i class="fas fa-th-large"></i>
-          </a>
-        </li>
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -226,7 +130,7 @@
                 </p>
               </a>
             </li>
-
+        
             <li class="nav-item menu-open">
               <a href="#" class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -300,7 +204,6 @@
       </div>
       <!-- /.sidebar -->
     </aside>
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
@@ -312,8 +215,8 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard v1</li>
+                <li class="breadcrumb-item"><a href="{{route('qrcode.index')}}">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -429,16 +332,21 @@
           </tr>
         </table>
 
-        {{-- Botão para abrir modal de finalizar compra --}}
-        <div class="text-end">
-          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar">
+      {{-- Botão para abrir modal de finalizar compra --}}
+      <div class="text-end">
+        <button 
+          type="button" 
+          class="btn btn-success" 
+          data-bs-toggle="modal" 
+          data-bs-target="#modalFinalizar"
+        >
           Finalizar Compra
-          </button>
-        </div>
-      @endisset
-          </div>
-        </div>
-        {{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
+        </button>
+      </div>
+    @endisset
+  </div>
+</div>
+{{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
 
         <!-- Modal: Finalizar Compra -->
         <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel"
@@ -559,88 +467,87 @@
                     </div>
                   </div>
 
-                  <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Gerar QR Code</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-            </form>
-          </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Gerar QR Code</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
-    </div>
-    <!-- Fim Modal Gerar -->
-    <table id="example2" class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>QRcode</th>
-          <th>Cliente</th>
-          <th>valor</th>
-          <th>Produto</th>
-          <th>Status</th>
-          <th>Gerador por:</th>
-          <th>Data de Uso</th>
-          <!-- <th>Criado em</th> -->
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($qrcodes as $qr)
-        <tr>
-          <td>
-          {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-          <br>
-          <button class="btn-custom" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">Imprimir</button>
-          </td>
-          <td> {{ $qr->cliente->nome ?? '---' }}</td>
-          <td>
-          @if(empty($qr->caixaItem->valorapagar))
-        <span class="badge badge-danger">Pendente</span>
-        @else
-        R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
-        @endif
-          </td>
-          <td>{{ $qr->produto->descricao ?? '---' }}</td>
-          <td>
-          @if ($qr->used_at)
-        <span class="badge badge-danger">Usado</span>
-        @else
-        <span class="badge badge-success">Disponível</span>
-        @endif
-          </td>
-          <td>{{ $qr->user->name ?? '---' }}</td>
-          <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
-          <td>
-          <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
-            <i class="bi bi-eye"></i> Ver Cliente
-          </button>
-          </td>
-
-          <!-- <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td> -->
-        </tr>
-    @endforeach
-      </tbody>
-
-    </table>
+      </div>
+    </form>
   </div>
-  <!-- Modal visualizar cliente -->
+</div>
+</div>
+<!-- Fim Modal Gerar -->
+        <table id="example2" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>QRcode</th>
+              <th>Cliente</th>
+              <th>valor</th>
+              <th>Produto</th>
+              <th>Status</th>
+              <th>Gerador por:</th>
+              <th>Data de Uso</th>
+              <!-- <th>Criado em</th> -->
+              <th>Ação</th>
+            </tr>
+          </thead>
+        <tbody>
   @foreach ($qrcodes as $qr)
-    <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
-    aria-hidden="true">
+    <tr>
+   <td>
+ {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+    <br>
+    <button class="btn-custom" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">Imprimir</button>
+  </td>
+  <td> {{ $qr->cliente->nome ?? '---' }}</td>
+  <td>
+    @if(empty($qr->caixaItem->valorapagar))
+    <span class="badge badge-danger">Pendente</span>
+    @else
+    R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
+    @endif
+  </td>
+  <td>{{ $qr->produto->descricao ?? '---' }}</td>
+        <td>
+          @if ($qr->used_at)
+          <span class="badge badge-danger">Usado</span>
+          @else
+          <span class="badge badge-success">Disponível</span>
+          @endif
+        </td>
+        <td>{{ $qr->user->name ?? '---' }}</td>
+      <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+      <td>
+  <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
+    <i class="bi bi-eye"></i> Ver Cliente
+  </button>
+</td>
+
+      <!-- <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td> -->
+    </tr>
+  @endforeach
+</tbody>
+
+        </table>
+    </div>
+<!-- Modal visualizar cliente -->
+ @foreach ($qrcodes as $qr)
+  <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
-      </div>
-      <div class="modal-body">
-        <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
-        <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
-        <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
-        <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
-        <p><strong>Pertence:</strong> {{ $qr->cliente->descricao ?? '---' }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-      </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
+          <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
+          <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
+          <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
+          <p><strong>Pertence:</strong> {{ $qr->cliente->descricao ?? '---' }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
       </div>
     </div>
     </div>
