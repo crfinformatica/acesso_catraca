@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FluxoCaixaController;
+use App\Models\FluxoCaixa;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Auth\LoginController;
@@ -57,5 +59,7 @@ Route::middleware(['auth'])->group(function () {
     // Cadastros
     Route::resource('filiais', FilialController::class);
     Route::resource('produtos', ProdutoController::class);
-
+    
+    // FLUXO DE CAIXA
+    Route::resource('fluxocaixa',FluxoCaixaController::class);
 }); // <-- fechamento do grupo de rotas
