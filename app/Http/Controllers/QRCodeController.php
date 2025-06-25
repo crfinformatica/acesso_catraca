@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\QRCode;
 use App\Models\Produto;
+use App\Models\Cliente;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 
 class QRCodeController extends Controller
@@ -29,57 +30,41 @@ class QRCodeController extends Controller
 }
 
 
+
 public function gerar(Request $request)
 {
-    $request->validate([
+    // Validação dos campos
+    $data = $request->validate([
         'produto_id' => 'required|exists:produtos,idproduto',
-        'desconto' => 'nullable|numeric',
-        'acrescimo' => 'nullable|numeric',
-        'formadepagamento' => 'required|string',
+        'nome'       => 'required|string|max:255',
+        'cpf'        => 'nullable|string|max:20',
+        'email'      => 'nullable|email|max:255',
+        'telefone'   => 'nullable|string|max:20',
+        'descricao'  => 'required|string|max:255', // será salva no cliente
     ]);
 
-    $codigo = Str::uuid()->toString();
-    $produtoId = $request->input('produto_id');
-    $userId = auth()->id();
-    $desconto = $request->input('desconto', 0);
-    $acrescimo = $request->input('acrescimo', 0);
-    $formaPagamento = $request->input('formadepagamento');
+    // Criar cliente com descrição do pertence
+    $cliente = Cliente::create([
+        'nome'      => $data['nome'],
+        'cpf'       => $data['cpf'],
+        'email'     => $data['email'],
+        'telefone'  => $data['telefone'],
+        'descricao' => $data['descricao'], // PERTENCE
+    ]);
 
-    // 🔎 Busca o produto
-    $produto = Produto::where('idproduto', $produtoId)->first();
+    // Criar o QRCode atrelado ao cliente
+    QRCode::create([
+        'code'        => \Str::uuid()->toString(),
+        'user_id'     => auth()->id(),
+        'produto_id'  => $data['produto_id'],
+        'cliente_id'  => $cliente->id,
+        'entrada_em'  => now(),
+    ]);
 
-    if (!$produto) {
-        return back()->withErrors(['produto_id' => 'Produto não encontrado.']);
-    }
-
-    $valor = $produto->valor;
-    $valorFinal = $valor - $desconto + $acrescimo;
-
-    // Salvar QRCode
-  $qrcode = QRCode::create([
-    'code' => $codigo,
-    'user_id' => $userId,
-    'produto_id' => $produtoId,
-]);
-
-
-    // Salvar no caixa_item
-   DB::table('caixa_item')->insert([
-    'qrcode_id' => $qrcode->id, // agora essa coluna existe
-    'iduser' => $userId,
-    'idproduto' => $produtoId,
-    'valor' => $valor,
-    'desconto' => $desconto,
-    'acrescimo' => $acrescimo,
-    'valorapagar' => $valorFinal,
-    'formadepagamento' => $formaPagamento,
-    'datetime' => now(),
-    'created_at' => now(),
-    'updated_at' => now(),
-]);
-
-    return redirect()->route('qrcode.index')->with('mensagem', 'QR Code e item do caixa registrados com sucesso.');
+    return redirect()->route('qrcode.index')->with('mensagem', 'QR Code e Cliente criados com sucesso!');
 }
+
+
 
 
 

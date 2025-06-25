@@ -9,7 +9,7 @@ class QRCode extends Model
     protected $table = 'qrcodes';
 
     // Adicione 'user_id' aqui:
-    protected $fillable = ['code', 'used_at', 'user_id', 'produto_id'];
+    protected $fillable = ['code', 'used_at', 'user_id', 'produto_id', 'entrada_em','cliente_id'];
 
       // Relacionamento com o usuário
     public function user()
@@ -26,6 +26,12 @@ class QRCode extends Model
     {
         return !is_null($this->used_at);
     }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
+    }
+
 
     public function caixaItem()
 {

@@ -8,6 +8,7 @@ use App\Http\Controllers\AcessoController;
 use App\Http\Controllers\TesteImageController;
 use App\Http\Controllers\FilialController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\GuardaVolumeController;
 
 // ROTA DE LOGIN
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -23,8 +24,14 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     // Página inicial pós login
-    Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode');
+    Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
+
+    // Gurda Volume
+    Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');
+    Route::post('/busca', [GuardaVolumeController::class, 'buscar'])->name('guarda_volume.buscar');
+
+    // Route::get('/api/guarda-volume/verificar/{uuid}', [GuardaVolumeController::class, 'retirarPertence'])->name('retirarPertence');
 
     // Validação de acesso por QR Code
     Route::post('/acesso/validar', [AcessoController::class, 'validarQRCode'])->name('acesso.validar');
@@ -32,6 +39,8 @@ Route::middleware(['auth'])->group(function () {
 
     // API local da catraca
     Route::get('/api/catraca/verificar/{uuid}', [AcessoController::class, 'verificar']);
+   
+
 
     // Teste de GD
     Route::get('/teste-gd', [TesteImageController::class, 'testeGD']);
@@ -41,7 +50,6 @@ Route::middleware(['auth'])->group(function () {
         $response = Http::get('http://localhost:5000/liberar');
         return $response->json();
     });
-
 
      // Forma de pagamento
     Route::get('/formapagamento.index', [QRCodeController::class, 'index'])->name('formapagamento.index');
