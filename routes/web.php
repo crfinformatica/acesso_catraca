@@ -29,11 +29,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
 
-    // Gurda Volume
+    // Guarda Volume
     Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');
     Route::post('/busca', [GuardaVolumeController::class, 'buscar'])->name('guarda_volume.buscar');
-
-    // Route::get('/api/guarda-volume/verificar/{uuid}', [GuardaVolumeController::class, 'retirarPertence'])->name('retirarPertence');
 
     // Validação de acesso por QR Code
     Route::post('/acesso/validar', [AcessoController::class, 'validarQRCode'])->name('acesso.validar');
@@ -41,8 +39,6 @@ Route::middleware(['auth'])->group(function () {
 
     // API local da catraca
     Route::get('/api/catraca/verificar/{uuid}', [AcessoController::class, 'verificar']);
-
-
 
     // Teste de GD
     Route::get('/teste-gd', [TesteImageController::class, 'testeGD']);
@@ -60,9 +56,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('filiais', FilialController::class);
     Route::resource('produtos', ProdutoController::class);
 
-    // FLUXO DE CAIXA
-    Route::resource('fluxocaixa', FluxoCaixaController::class);
+    // FLUXO DE CAIXA - excluindo método show para evitar erro
+    Route::resource('fluxocaixa', FluxoCaixaController::class)->except(['show']);
+
     Route::get('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorio'])->name('fluxocaixa.relatorio');
     Route::post('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorioResultado'])->name('fluxocaixa.relatorio.resultado');
+    Route::post('fluxocaixa/relatorio/pdf', [FluxoCaixaController::class, 'gerarPdf'])->name('fluxocaixa.relatorio.pdf');
+    Route::post('fluxocaixa/relatorio/excel', [FluxoCaixaController::class, 'gerarExcel'])->name('fluxocaixa.relatorio.excel');
 
-}); // <-- fechamento do grupo de rotas
+}); // fechamento do grupo de rotas

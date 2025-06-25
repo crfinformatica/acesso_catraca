@@ -1,20 +1,19 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\FluxoCaixa;
 use App\Models\Filial;
 use Illuminate\Http\Request;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\FluxoCaixaExport;
 
 class FluxoCaixaController extends Controller
 {
-    // Exibe o formulário
-
     public function index()
     {
-        // Puxa todos os lançamentos, já com a filial carregada
         $lancamentos = FluxoCaixa::with('filial')->get();
-
-        // Passa para a view
         return view('fluxocaixa.index', compact('lancamentos'));
     }
 
@@ -24,7 +23,6 @@ class FluxoCaixaController extends Controller
         return view('fluxocaixa.create', compact('filiais'));
     }
 
-    // Salva os dados
     public function store(Request $request)
     {
         $request->validate([
@@ -35,42 +33,70 @@ class FluxoCaixaController extends Controller
             'dataregistro' => 'required|date',
         ]);
 
-        FluxoCaixa::create([
-            'idfilial' => $request->idfilial,
-            'tipo' => $request->tipo,
-            'valor' => $request->valor,
-            'descricao' => $request->descricao,
-            'dataregistro' => $request->dataregistro,
-        ]);
-
+        FluxoCaixa::create($request->only(['idfilial', 'tipo', 'valor', 'descricao', 'dataregistro']));
         return redirect()->route('fluxocaixa.index')->with('success', 'Movimento registrado com sucesso!');
     }
+
+    // 🔎 Exibir formulário do relatório
     public function relatorio()
     {
         $filiais = Filial::all();
         return view('fluxocaixa.relatorio', compact('filiais'));
     }
+
+    // 🔍 Buscar resultado filtrado
     public function relatorioResultado(Request $request)
-{
-    $request->validate([
-        'idfilial' => 'nullable|exists:filiais,id',
-        'data_inicio' => 'required|date',
-        'data_fim' => 'required|date|after_or_equal:data_inicio',
-    ]);
+    {
+        $request->validate([
+            'idfilial' => 'nullable|exists:filiais,id',
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ]);
 
-    $query = FluxoCaixa::with('filial')
-        ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
+        $query = FluxoCaixa::with('filial')
+            ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
 
-    if ($request->idfilial) {
-        $query->where('idfilial', $request->idfilial);
+        if ($request->idfilial) {
+            $query->where('idfilial', $request->idfilial);
+        }
+
+        $lancamentos = $query->orderBy('dataregistro')->get();
+        $filiais = Filial::all();
+
+        return view('fluxocaixa.relatorio', compact('lancamentos', 'filiais', 'request'));
     }
 
-    $lancamentos = $query->orderBy('dataregistro')->get();
+    // 📄 Gerar PDF
+    public function gerarPdf(Request $request)
+    {
+        $request->validate([
+            'idfilial' => 'nullable|exists:filiais,id',
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ]);
 
-    $filiais = Filial::all();
-    return view('fluxocaixa.relatorio', compact('lancamentos', 'filiais', 'request'));
-}
+        $query = FluxoCaixa::with('filial')
+            ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
 
+        if ($request->idfilial) {
+            $query->where('idfilial', $request->idfilial);
+        }
 
-    // (outros métodos como index, edit, update etc.)
+        $lancamentos = $query->get();
+
+        $pdf = PDF::loadView('fluxocaixa.relatorio_pdf', compact('lancamentos', 'request'));
+        return $pdf->download('relatorio_fluxo_caixa.pdf');
+    }
+
+    // 📊 Gerar Excel
+    public function gerarExcel(Request $request)
+    {
+        $request->validate([
+            'idfilial' => 'nullable|exists:filiais,id',
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ]);
+
+        return Excel::download(new FluxoCaixaExport($request), 'relatorio_fluxo_caixa.xlsx');
+    }
 }
