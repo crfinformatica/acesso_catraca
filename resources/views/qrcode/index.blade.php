@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 
 </head>
@@ -130,7 +130,6 @@
                 </p>
               </a>
             </li>
-        
             <li class="nav-item menu-open">
               <a href="#" class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -188,12 +187,6 @@
                   <a href="{{ route('formapagamento.index') }}" class="nav-link">
                     <i class="fas fa-money-bill nav-icon"></i>
                     <p>Formas de Pagamento</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('fluxocaixa.index') }}" class="nav-link">
-                    <i class="nav-icon fas fa-cash-register"></i>
-                    <p>Fluxo de Caixa</p>
                   </a>
                 </li>
 
@@ -284,53 +277,58 @@
         </div>
 
 
-        {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
-        <div class="card card-secondary mb-4">
-          <div class="card-header">
-            <h3 class="card-title">Guarda Volume - Consulta</h3>
-          </div>
-          <div class="card-body">
-            @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-      @endif
+  {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
+<div class="card card-secondary mb-4">
+  <div class="card-header">
+    <h3 class="card-title">Guarda Volume - Consulta</h3>
+  </div>
+  <div class="card-body">
+    @if(session('error'))
+      <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
-            {{-- Formulário de busca --}}
-            <form method="POST" action="{{ route('guarda_volume.buscar') }}" class="mb-4">
-              @csrf
-              <div class="input-group">
-                <input type="text" id="codigo_qrcode" name="codigo_qrcode" class="form-control"
-                  placeholder="Escaneie ou digite o QR Code" required autofocus>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-primary" type="submit">Buscar</button>
-                </div>
-              </div>
-            </form>
+    {{-- Formulário de busca --}}
+    <form method="POST" action="{{ route('guarda_volume.buscar') }}" class="mb-4">
+      @csrf
+      <div class="input-group">
+        <input type="text"
+               id="codigo_qrcode"
+               name="codigo_qrcode"
+               class="form-control"
+               placeholder="Escaneie ou digite o QR Code"
+               required
+               autofocus>
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        </div>
+      </div>
+    </form>
 
-            @isset($guardaVolume)
-        {{-- Exibe dados do QRCode encontrado --}}
-        <h5>Informações do Cliente e Pertence</h5>
-        <table class="table table-sm table-bordered">
-          <tr>
+    @isset($guardaVolume)
+      {{-- Exibe dados do QRCode encontrado --}}
+      <h5>Informações do Cliente e Pertence</h5>
+      <table class="table table-sm table-bordered">
+        <tr>
           <th>Cliente</th>
           <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
           <th>Descrição</th>
           <td>{{ $guardaVolume->cliente->descricao ?? '---' }}</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
           <th>Entrada</th>
           <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
           <th>Tempo (h)</th>
           <td>{{ $tempoGuardado }}hr</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
           <th>Valor a Pagar</th>
-          <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
-          </tr>
-        </table>
+          <td>R$ {{ number_format($valorAPagar,2,',','.') }}</td>
+        </tr>
+      </table>
 
       {{-- Botão para abrir modal de finalizar compra --}}
       <div class="text-end">
@@ -338,9 +336,8 @@
           type="button" 
           class="btn btn-success" 
           data-bs-toggle="modal" 
-          data-bs-target="#modalFinalizar"
-        >
-          Finalizar Compra
+          data-bs-target="#modalFinalizar">
+          Finalizar venda
         </button>
       </div>
     @endisset
@@ -348,58 +345,45 @@
 </div>
 {{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
 
-        <!-- Modal: Finalizar Compra -->
-        <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <form method="POST" action="{{ route('guarda.finalizar') }}">
-              @csrf
-              <input type="hidden" name="qrcode_id" value="{{ $guardaVolume->id ?? '' }}">
-              <input type="hidden" name="valor_base" value="{{ $valorAPagar ?? 0 }}">
+<!-- Modal: Finalizar Compra -->
+<div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('guarda.finalizar') }}">
+      @csrf
+      <input type="hidden" name="qrcode_id" value="{{ $guardaVolume->id ?? '' }}">
+      <input type="hidden" name="valor_base" value="{{ $valorAPagar ?? 0 }}">
 
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-                </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
+        </div>
 
-                <div class="modal-body">
-                  <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
-                  <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
-                  <div class="mb-2"><strong>Tempo:</strong>
-                    <td>{{ $tempoGuardado ?? '---' }}</td> h
-                  </div>
-                  <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format($valorAPagar ?? 0, 2, ',', '.') }}
-                  </div>
+          <div class="modal-body">
+          <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
+          <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
+          <div class="mb-2"><strong>Tempo:</strong>  <td>{{ $tempoGuardado ?? '---' }}</td> h</div>
+          <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format($valorAPagar ?? 0, 2, ',', '.') }}</div>
 
-                  <div class="mb-3">
-                    <label for="desconto" class="form-label">Desconto (R$)</label>
-                    <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
-                  </div>
+          <div class="mb-3">
+            <label for="desconto" class="form-label">Desconto (R$)</label>
+            <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
+          </div>
 
-                  <div class="mb-3">
-                    <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
-                    <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
-                  </div>
+          <div class="mb-3">
+            <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
+            <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
+          </div>
 
-                  <div class="mb-3">
-                    <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
-                    <select name="formadepagamento" id="formadepagamento" class="form-select" required>
-                      <option value="" disabled selected>Escolha a forma</option>
-                      <option value="dinheiro">Dinheiro</option>
-                      <option value="pix">Pix</option>
-                      <option value="debito">Débito</option>
-                      <option value="credito">Crédito</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Confirmar Pagamento</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-              </div>
-            </form>
+          <div class="mb-3">
+            <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
+            <select name="formadepagamento" id="formadepagamento" class="form-select" required>
+              <option value="" disabled selected>Escolha a forma</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="pix">Pix</option>
+              <option value="debito">Débito</option>
+              <option value="credito">Crédito</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -412,26 +396,23 @@
 </div>
 
     <!-- Fim Modal -->
-
-        <!-- Fim Modal -->
-
         <div class="text-end my-3">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
             <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
           </button>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form method="POST" action="{{ route('qrcode.gerar') }}">
-              @csrf
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Gerar QR Code para Produto</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-                </div>
-                <div class="modal-body">
+<!-- Modal -->
+<div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('qrcode.gerar') }}">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Gerar QR Code para Produto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
+        </div>
+        <div class="modal-body">
 
           <!-- Produto -->
           <div class="mb-3">
@@ -450,50 +431,32 @@
             <label for="valor_produto" class="form-label">Valor do Produto</label>
             <input type="text" id="valor_produto" class="form-control" readonly>
           </div>
-                  <!-- Produto -->
-                  <div class="mb-3">
-                    <label for="produto_id" class="form-label">Produto</label>
-                    <select name="produto_id" id="produto_id" class="form-select" required>
-                      <option value="" disabled selected>Escolha um produto</option>
-                      @foreach ($produtos as $produto)
-              <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}"
-              data-descricao="{{ $produto->descricao }}">
-              {{ $produto->descricao }}
-              </option>
-            @endforeach
-                    </select>
-                  </div>
-                  <!-- Valor -->
-                  <div class="mb-3">
-                    <label for="valor_produto" class="form-label">Valor do Produto</label>
-                    <input type="text" id="valor_produto" class="form-control" readonly>
-                  </div>
 
-                  <!-- Campos do cliente e descrição -->
-                  <div id="dados-cliente" style="display: none;">
-                    <hr>
-                    <h6>Dados do Cliente</h6>
-                    <div class="mb-3">
-                      <label for="nome" class="form-label">Nome</label>
-                      <input type="text" name="nome" id="nome" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="cpf" class="form-label">CPF</label>
-                      <input type="text" name="cpf" id="cpf" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="email" class="form-label">E-mail</label>
-                      <input type="email" name="email" id="email" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="telefone" class="form-label">Telefone</label>
-                      <input type="text" name="telefone" id="telefone" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="descricao" class="form-label">Descrição do Pertence</label>
-                      <input type="text" name="descricao" id="descricao" class="form-control">
-                    </div>
-                  </div>
+<!-- Campos do cliente e descrição -->
+<div id="dados-cliente" style="display: none;">
+  <hr>
+  <h6>Dados do Cliente</h6>
+  <div class="mb-3">
+    <label for="nome" class="form-label">Nome</label>
+    <input type="text" name="nome" id="nome" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="cpf" class="form-label">CPF</label>
+    <input type="text" name="cpf" id="cpf" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">E-mail</label>
+    <input type="email" name="email" id="email" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="telefone" class="form-label">Telefone</label>
+    <input type="text" name="telefone" id="telefone" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="descricao" class="form-label">Descrição do Pertence</label>
+    <input type="text" name="descricao" id="descricao" class="form-control">
+  </div>
+</div>
 
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Gerar QR Code</button>
@@ -515,18 +478,18 @@
               <th>Status</th>
               <th>Gerador por:</th>
               <th>Data de Uso</th>
-              <!-- <th>Criado em</th> -->
               <th>Ação</th>
             </tr>
           </thead>
         <tbody>
   @foreach ($qrcodes as $qr)
     <tr>
-   <td>
- {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-    <br>
-    <button class="btn-custom" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">Imprimir</button>
-  </td>
+  <td class="text-center">
+  <div id="qrcode-{{ $qr->id }}">
+    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+  </div>
+</td>
+
   <td> {{ $qr->cliente->nome ?? '---' }}</td>
   <td>
     @if(empty($qr->caixaItem->valorapagar))
@@ -549,13 +512,15 @@
   <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
     <i class="bi bi-eye"></i> Ver Cliente
   </button>
+  <button
+    class="btn btn-primary btn-sm"
+    onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
+    <i class="bi bi-printer"></i> Imprimir QRcode
+  </button>
 </td>
-
-      <!-- <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td> -->
     </tr>
   @endforeach
 </tbody>
-
         </table>
     </div>
 <!-- Modal visualizar cliente -->
@@ -572,18 +537,17 @@
           <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
           <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
           <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
-          <p><strong>Pertence:</strong> {{ $qr->cliente->descricao ?? '---' }}</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
         </div>
       </div>
     </div>
-    </div>
-  @endforeach
+  </div>
+@endforeach
 
 
-  <!-- right col -->
+    <!-- right col -->
   </div>
   <!-- /.row (main row) -->
   </div><!-- /.container-fluid -->
@@ -607,64 +571,64 @@
   </div>
 
   <script>
-    // Se você tiver vários botões e quiser passar o ID do produto para o select do modal
-    document.querySelectorAll('.botao-produto').forEach(botao => {
-      botao.addEventListener('click', function () {
-        const produtoId = this.dataset.produtoId;
-        document.querySelector('#produto_id').value = produtoId;
-      });
-    });
-  </script>
+  // Se você tiver vários botões e quiser passar o ID do produto para o select do modal
+document.querySelectorAll('.botao-produto').forEach(botao => {
+  botao.addEventListener('click', function () {
+    const produtoId = this.dataset.produtoId;
+    document.querySelector('#produto_id').value = produtoId;
+  });
+});
+</script>
   <!-- ./wrapper -->
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const selectProduto = document.getElementById('produto_id');
-      const inputValor = document.getElementById('valor_produto');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectProduto = document.getElementById('produto_id');
+    const inputValor = document.getElementById('valor_produto');
 
-      selectProduto.addEventListener('change', function () {
-        const valor = this.options[this.selectedIndex].getAttribute('data-valor');
-        if (valor) {
-          inputValor.value = 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
-        } else {
-          inputValor.value = '';
-        }
-      });
-    });
-  </script>
-  <!-- Dados do cliente -->
-
-  <script>
-    document.getElementById('produto_id').addEventListener('change', function () {
-      let selectedOption = this.options[this.selectedIndex];
-      let valor = selectedOption.getAttribute('data-valor');
-      let descricao = selectedOption.getAttribute('data-descricao');
-
-      // Atualiza campo de valor
-      document.getElementById('valor_produto').value = parseFloat(valor).toFixed(2).replace('.', ',');
-
-      // Mostra os campos de cliente se o produto for "Guarda Volume"
-      if (descricao && descricao.toLowerCase().includes("guarda volume")) {
-        document.getElementById('dados-cliente').style.display = 'block';
-        // Torna campos obrigatórios
-        document.getElementById('nome').required = true;
-        document.getElementById('cpf').required = true;
-        document.getElementById('email').required = true;
-        document.getElementById('telefone').required = true;
-        document.getElementById('descricao').required = true;
+    selectProduto.addEventListener('change', function () {
+      const valor = this.options[this.selectedIndex].getAttribute('data-valor');
+      if (valor) {
+        inputValor.value = 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
       } else {
-        document.getElementById('dados-cliente').style.display = 'none';
-        document.getElementById('nome').required = false;
-        document.getElementById('cpf').required = false;
-        document.getElementById('email').required = false;
-        document.getElementById('telefone').required = false;
-        document.getElementById('descricao').required = false;
-
+        inputValor.value = '';
       }
     });
-  </script>
+  });
+</script>
+<!-- Dados do cliente -->
+
+<script>
+  document.getElementById('produto_id').addEventListener('change', function () {
+    let selectedOption = this.options[this.selectedIndex];
+    let valor = selectedOption.getAttribute('data-valor');
+    let descricao = selectedOption.getAttribute('data-descricao');
+
+    // Atualiza campo de valor
+    document.getElementById('valor_produto').value = parseFloat(valor).toFixed(2).replace('.', ',');
+
+    // Mostra os campos de cliente se o produto for "Guarda Volume"
+    if (descricao && descricao.toLowerCase().includes("guarda volume")) {
+      document.getElementById('dados-cliente').style.display = 'block';
+      // Torna campos obrigatórios
+      document.getElementById('nome').required = true;
+      document.getElementById('cpf').required = true;
+      document.getElementById('email').required = true;
+      document.getElementById('telefone').required = true;
+      document.getElementById('descricao').required = true;
+    } else {
+      document.getElementById('dados-cliente').style.display = 'none';
+      document.getElementById('nome').required = false;
+      document.getElementById('cpf').required = false;
+      document.getElementById('email').required = false;
+      document.getElementById('telefone').required = false;
+      document.getElementById('descricao').required = false;
+
+    }
+  });
+</script>
 
   <!-- DataTables Config -->
   <script>
@@ -750,7 +714,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="{{ asset('js/modal_qrcode.js?v=1.01') }}"></script>
-
+  
 </body>
 
 </html>
