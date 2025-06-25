@@ -608,6 +608,12 @@
         </td>
         <td>{{ $qr->user->name ?? '---' }}</td>
       <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+      <td>
+  <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
+    <i class="bi bi-eye"></i> Ver Cliente
+  </button>
+</td>
+
       <!-- <td>{{ $qr->created_at ? $qr->created_at->format('d/m/Y H:i') : '---' }}</td> -->
     </tr>
   @endforeach
@@ -615,6 +621,28 @@
 
         </table>
     </div>
+<!-- Modal visualizar cliente -->
+ @foreach ($qrcodes as $qr)
+  <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
+          <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
+          <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
+          <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
+          <p><strong>Pertence:</strong> {{ $qr->cliente->descricao ?? '---' }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+@endforeach
 
 
     <!-- right col -->
