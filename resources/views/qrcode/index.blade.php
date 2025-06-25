@@ -31,7 +31,7 @@
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@vite(['resources/css/app.css', 'resources/css/custom.css', 'resources/js/app.js'])
+  @vite(['resources/css/app.css', 'resources/css/custom.css', 'resources/js/app.js'])
 
 </head>
 
@@ -377,7 +377,7 @@
 
           <div class="mb-3">
             <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
-            <select name="formadepagamento" id="formadepagamento" class="form-select" required>
+            <select name="formadepagamento" id="formadepagamento" class="form-control" required>
               <option value="" disabled selected>Escolha a forma</option>
               <option value="dinheiro">Dinheiro</option>
               <option value="pix">Pix</option>
@@ -537,6 +537,15 @@
           <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
           <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
           <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+
+        <strong>QRcode:</strong>
+        <td>
+          @if ($qr->used_at)
+          <span class="badge badge-danger">Usado</span>
+          @else
+          <span class="badge badge-success">Disponível</span>
+          @endif
+        </td>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

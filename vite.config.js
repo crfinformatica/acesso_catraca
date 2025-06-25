@@ -6,11 +6,14 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss', // se for usar SCSS
-                'resources/css/colors.css', // adiciona aqui
+                'resources/sass/app.scss',         // se ainda estiver usando
+                'resources/css/colors.css',        // já existente
+                'resources/css/custom.css',        // adicione aqui
                 'resources/js/app.js',
             ],
             refresh: true,
         }),
     ],
 });
+
+
