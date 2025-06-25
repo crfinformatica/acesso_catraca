@@ -458,7 +458,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
         </div>
 
-        <div class="modal-body">
+          <div class="modal-body">
           <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
           <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
           <div class="mb-2"><strong>Tempo:</strong>  <td>{{ $tempoGuardado ?? '---' }}</td> h</div>
@@ -494,14 +494,13 @@
     </form>
   </div>
 </div>
-<!-- Fim Modal -->
 
- <div class="text-end my-3">
+    <!-- Fim Modal -->
+        <div class="text-end my-3">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
             <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
           </button>
         </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
@@ -573,8 +572,9 @@
           <thead>
             <tr>
               <th>QRcode</th>
+              <th>Cliente</th>
+              <th>Gerador por:</th>
               <th>Status</th>
-              <th>Usuario</th>
               <th>Produto</th>
               <th>valor</th>
               <th>Data de Uso</th>
@@ -590,15 +590,16 @@
     <br>
     <button class="btn-custom" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">Imprimir</button>
   </td>
-      <td>
-        @if ($qr->used_at)
-          <span class="badge badge-danger">Usado</span>
-        @else
-          <span class="badge badge-success">Disponível</span>
-        @endif
-      </td>
-      <td>{{ $qr->user->name ?? '---' }}</td>
-      <td>{{ $qr->produto->descricao ?? '---' }}</td>
+  <td> {{ $qr->cliente->nome ?? '---' }}</td>
+  <td>{{ $qr->user->name ?? '---' }}</td>
+  <td>
+    @if ($qr->used_at)
+    <span class="badge badge-danger">Usado</span>
+    @else
+    <span class="badge badge-success">Disponível</span>
+    @endif
+  </td>
+  <td>{{ $qr->produto->descricao ?? '---' }}</td>
         <td>
           @if(empty($qr->caixaItem->valorapagar))
             <span class="badge badge-danger">Pendente</span>
