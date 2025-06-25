@@ -1,0 +1,37 @@
+:root {
+    --grafite: #3f4045;
+    --preto: #000000;
+    --laranja: #c56032;
+    --azul: #2757a4;
+}
+
+/* Navbar */
+.main-header {
+    background-color: var(--grafite) !important;
+    color: #fff !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: var(--preto) !important;
+    color: #fff !important;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: var(--azul) !important;
+    border-color: var(--azul) !important;
+    color: #fff !important;
+}
+
+.btn-warning {
+    background-color: var(--laranja) !important;
+    border-color: var(--laranja) !important;
+    color: #fff !important;
+}
+
+/* Links ativos no menu lateral */
+.nav-sidebar .nav-item > .nav-link.active {
+    background-color: var(--laranja) !important;
+    color: #fff !important;
+}

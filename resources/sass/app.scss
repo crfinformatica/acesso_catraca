@@ -6,3 +6,82 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+// ===============================
+// PALETA PERSONALIZADA
+// ===============================
+$primary:   #2757a4; // Azul
+$secondary: #3f4045; // Grafite
+$danger:    #c56032; // Laranja
+$dark:      #000000; // Preto
+
+$body-bg:    #ffffff;
+$body-color: #3f4045;
+
+// Bordas e foco
+$input-border-color: $secondary;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(39, 87, 164, 0.25); // sombra azul leve
+
+// ===============================
+// IMPORTA BOOTSTRAP E ADMINLTE
+// ===============================
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/admin-lte/build/scss/AdminLTE";
+@import "node_modules/admin-lte/build/scss/alt/adminlte.pages";
+
+// ===============================
+// CUSTOMIZAÇÕES ADICIONAIS
+// ===============================
+.sidebar-dark-primary {
+  background-color: $secondary !important;
+}
+.navbar-primary {
+  background-color: $primary !important;
+}
+
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  &:hover {
+    background-color: darken($primary, 10%);
+    border-color: darken($primary, 12%);
+  }
+}
+
+.btn-danger {
+  background-color: $danger;
+  border-color: $danger;
+  &:hover {
+    background-color: darken($danger, 10%);
+    border-color: darken($danger, 12%);
+  }
+}
+
+.form-control:focus {
+  border-color: $primary;
+  box-shadow: $input-focus-box-shadow;
+}
+.form-control {
+  border-color: $input-border-color;
+}
+.form-control:focus {
+  border-color: $input-focus-border-color;
+  box-shadow: $input-focus-box-shadow;
+}
+.table {
+  th {
+    background-color: $secondary;
+    color: #ffffff;
+  }
+  td {
+    color: $body-color;
+  }
+}
+// ===============================
+// IMPORTA ARQUIVOS DE COMPONENTES
+// ===============================
+@import "components/navbar";
+@import "components/sidebar";
+@import "components/footer";
+@import "components/cards";
+@import "components/modals";        

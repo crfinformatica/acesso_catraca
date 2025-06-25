@@ -1,7 +1,23 @@
-// Body
-$body-bg: #f8fafc;
+// =========================
+// CORES PERSONALIZADAS
+// =========================
+$primary:       #2757a4; // Azul da marca
+$secondary:     #3f4045; // Grafite
+$danger:        #c56032; // Laranja
+$dark:          #000000; // Preto
 
-// Typography
+// =========================
+// ESTILO DO CORPO E TIPOGRAFIA
+// =========================
+$body-bg:               #f8fafc;
+$body-color:            $secondary;
 $font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$font-size-base:        0.9rem;
+$line-height-base:      1.6;
+
+// =========================
+// CAMPOS DE FORMULÁRIO
+// =========================
+$input-border-color:          $secondary;
+$input-focus-border-color:    $primary;
+$input-focus-box-shadow:      0 0 0 0.2rem rgba(39, 87, 164, 0.25);
