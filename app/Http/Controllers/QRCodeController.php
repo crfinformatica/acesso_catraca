@@ -49,7 +49,6 @@ public function gerar(Request $request)
         'cpf'       => $data['cpf'],
         'email'     => $data['email'],
         'telefone'  => $data['telefone'],
-        'descricao' => $data['descricao'], // PERTENCE
     ]);
 
     // Criar o QRCode atrelado ao cliente
@@ -59,6 +58,8 @@ public function gerar(Request $request)
         'produto_id'  => $data['produto_id'],
         'cliente_id'  => $cliente->id,
         'entrada_em'  => now(),
+        'descricao' => $data['descricao'], // PERTENCE
+
     ]);
 
     return redirect()->route('qrcode.index')->with('mensagem', 'QR Code e Cliente criados com sucesso!');

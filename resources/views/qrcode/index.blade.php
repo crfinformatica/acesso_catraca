@@ -386,7 +386,6 @@
             </select>
           </div>
         </div>
-
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Confirmar Pagamento</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -418,7 +417,7 @@
           <!-- Produto -->
           <div class="mb-3">
             <label for="produto_id" class="form-label">Produto</label>
-            <select name="produto_id" id="produto_id" class="form-select" required>
+            <select name="produto_id" id="produto_id" class="form-control" required>
               <option value="" disabled selected>Escolha um produto</option>
               @foreach ($produtos as $produto)
                 <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}" data-descricao="{{ $produto->descricao }}">
@@ -537,7 +536,7 @@
           <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
           <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
           <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
-          <p><strong>Pertences:</strong> {{ $qr->cliente->descricao ?? '---' }}</p>
+          <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

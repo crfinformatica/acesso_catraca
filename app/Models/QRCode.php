@@ -9,7 +9,7 @@ class QRCode extends Model
     protected $table = 'qrcodes';
 
     // Adicione 'user_id' aqui:
-    protected $fillable = ['code', 'used_at', 'user_id', 'produto_id', 'entrada_em','cliente_id'];
+    protected $fillable = ['code', 'used_at', 'user_id', 'produto_id', 'entrada_em', 'descricao', 'cliente_id'];
 
       // Relacionamento com o usuário
     public function user()

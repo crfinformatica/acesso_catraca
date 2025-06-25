@@ -27,7 +27,6 @@ class Cliente extends Model
         'cpf',
         'email',
         'telefone',
-        'descricao'
         // outros campos conforme sua tabela
     ];
 
