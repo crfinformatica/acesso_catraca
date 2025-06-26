@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     // Página inicial pós login
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
+    Route::post('/verifica-caixa-aberto', [FluxoCaixaController::class, 'verificaCaixaAberto'])->name('caixa.verifica');
 
     // Guarda Volume
     Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');

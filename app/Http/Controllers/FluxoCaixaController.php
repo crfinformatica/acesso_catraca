@@ -100,4 +100,18 @@ class FluxoCaixaController extends Controller
 
         return Excel::download(new FluxoCaixaExport($request), 'relatorio_fluxo_caixa.xlsx');
     }
+     public function verificaCaixaAberto(Request $request)
+    {
+        $request->validate([
+            'iduser' => 'required|integer',
+        ]);
+
+        $caixaAberto = DB::table('caixa_header')
+            ->where('iduser', $request->iduser)
+            ->whereNull('datahora_fechamento')
+            ->exists();
+
+        return response()->json(['caixa_aberto' => $caixaAberto]);
+    }
+
 }
