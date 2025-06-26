@@ -497,6 +497,69 @@
             </form>
           </div>
         </div>
+<<<<<<< HEAD
+=======
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+<!-- Fim Modal Gerar -->
+        <table id="example2" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>QRcode</th>
+              <th>Cliente</th>
+              <th>valor pago</th>
+              <th>Produto</th>
+              <th>Status</th>
+              <th>Gerador por:</th>
+              <th>Data de Uso</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+        <tbody>
+  @foreach ($qrcodes as $qr)
+    <tr>
+  <td class="text-center">
+  <div id="qrcode-{{ $qr->id }}">
+    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+  </div>
+</td>
+
+  <td> {{ $qr->cliente->nome ?? '---' }}</td>
+  <td>
+    @if(empty($qr->caixaItem->valorapagar))
+    <span class="badge badge-danger">Pendente</span>
+    @else
+    R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
+    @endif
+  </td>
+  <td>{{ $qr->produto->descricao ?? '---' }}</td>
+        <td>
+          @if ($qr->used_at)
+          <span class="badge badge-danger">Usado</span>
+          @else
+          <span class="badge badge-success">Disponível</span>
+          @endif
+        </td>
+        <td>{{ $qr->user->name ?? '---' }}</td>
+      <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+      <td>
+  <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
+    <i class="bi bi-eye"></i> Ver Cliente
+  </button>
+  <button
+    class="btn btn-primary btn-sm"
+    onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
+    <i class="bi bi-printer"></i> Imprimir QRcode
+  </button>
+</td>
+    </tr>
+  @endforeach
+</tbody>
+        </table>
+>>>>>>> 86b9a5473c593bbc3b07c9214664d241d03817ca
     </div>
     <!-- Fim Modal Gerar -->
     <table id="example2" class="table table-bordered table-hover">
