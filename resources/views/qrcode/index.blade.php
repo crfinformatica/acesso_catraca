@@ -32,7 +32,11 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<<<<<<< HEAD
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+=======
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+>>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
   @vite(['resources/css/app.css', 'resources/css/custom.css', 'resources/js/app.js'])
 
 </head>
@@ -333,7 +337,36 @@
           Finalizar venda
           </button>
         </div>
+<<<<<<< HEAD
       @endisset
+=======
+
+          <div class="modal-body">
+          <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
+          <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
+          <div class="mb-2"><strong>Tempo:</strong>  <td>{{ $tempoGuardado ?? '---' }}</td> h</div>
+          <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format($valorAPagar ?? 0, 2, ',', '.') }}</div>
+
+          <div class="mb-3">
+            <label for="desconto" class="form-label">Desconto (R$)</label>
+            <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
+          </div>
+
+          <div class="mb-3">
+            <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
+            <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
+          </div>
+
+          <div class="mb-3">
+            <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
+            <select name="formadepagamento" id="formadepagamento" class="form-control" required>
+              <option value="" disabled selected>Escolha a forma</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="pix">Pix</option>
+              <option value="debito">Débito</option>
+              <option value="credito">Crédito</option>
+            </select>
+>>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
           </div>
         </div>
         {{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
@@ -525,6 +558,7 @@
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+<<<<<<< HEAD
       <div class="modal-header">
         <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
       </div>
@@ -538,6 +572,30 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
       </div>
+=======
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
+          <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
+          <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
+          <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
+          <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+
+        <strong>QRcode:</strong>
+        <td>
+          @if ($qr->used_at)
+          <span class="badge badge-danger">Usado</span>
+          @else
+          <span class="badge badge-success">Disponível</span>
+          @endif
+        </td>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+>>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
       </div>
     </div>
     </div>
