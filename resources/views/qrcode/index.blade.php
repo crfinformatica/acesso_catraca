@@ -473,7 +473,7 @@
             <tr>
               <th>QRcode</th>
               <th>Cliente</th>
-              <th>valor</th>
+              <th>valor pago</th>
               <th>Produto</th>
               <th>Status</th>
               <th>Gerador por:</th>

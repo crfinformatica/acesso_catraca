@@ -80,20 +80,25 @@ if (!$qr || $qr->produto->descricao !== 'Guarda Volume') {
 
     $entrada = $qr->entrada_em ? Carbon::parse($qr->entrada_em) : $qr->created_at;
     $saida = Carbon::now();
-    $tempo = $entrada->diffInMinutes($saida);
-    $tempoGuardado = ceil($tempo / 60);
-    $valorAPagar = $tempoGuardado * 3.00;
 
-    return view('qrcode.index', [
-        'guardaVolume' => $qr,
-        'tempoGuardado' => $tempoGuardado,
-        'valorAPagar' => $valorAPagar,
-        'totalQRCodes'=> $totalQRCodes,
-      'qrcodesUsados'=> $qrcodesUsados,
-      'qrcodesDisponiveis' =>$qrcodesDisponiveis,
-      'qrcodes'=>$qrcodes,
-      'produtos'=> $produtos
-    ]);
+    $tempoEmHoras = $entrada->diffInHours($saida);
+    $diasCompletosOuFracionados = ceil($tempoEmHoras / 24);
+
+    // Valor base configurado no produto, ou R$ 3,00 como fallback
+    $valorBase = $qr->produto->valor ?? 10.00;
+    $valorAPagar = $valorBase * $diasCompletosOuFracionados;
+
+return view('qrcode.index', [
+    'guardaVolume' => $qr,
+    'tempoGuardado' => $tempoEmHoras, // mostra o tempo total em horas, se preferir pode mudar para dias
+    'valorAPagar' => $valorAPagar,
+    'totalQRCodes'=> $totalQRCodes,
+    'qrcodesUsados'=> $qrcodesUsados,
+    'qrcodesDisponiveis' => $qrcodesDisponiveis,
+    'qrcodes' => $qrcodes,
+    'produtos' => $produtos
+]);
+
 }
 
 public function finalizarRetirada(Request $request)
