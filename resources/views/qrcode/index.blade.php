@@ -208,6 +208,15 @@
     </div>
 </div>
 
+  {{-- SEÇÃO VISUAL PROFISSIONAL --}}
+        <div class="d-flex align-items-center mb-3">
+            <div class="flex-grow-1 border-bottom border-secondary"></div>
+            <div class="px-3 text-muted fw-bold" style="white-space: nowrap;">
+            
+            </div>
+            <div class="flex-grow-1 border-bottom border-secondary"></div>
+        </div>
+
 {{-- Tabela de QR Codes --}}
 <div class="table-responsive">
     <table id="example1" class="table table-bordered table-hover text-center align-middle">
@@ -281,102 +290,66 @@
         </tbody>
     </table>
 </div>
-            @isset($guardaVolume)
-        {{-- Exibe dados do QRCode encontrado --}}
-        <h5>Informações do Cliente e Pertence</h5>
-        <table class="table table-sm table-bordered">
+
+<!-- Modal para finalizar venda -->
+        @if(isset($guardaVolume))
+<div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header card-header">
+        <h5 class="modal-title" style="color:#fff" id="modalDetalhesLabel">Informações do Cliente e Pertence</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-sm">
           <tr>
-          <th>Cliente</th>
-          <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
+            <th>Cliente</th>
+            <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
           </tr>
           <tr>
-          <th>Descrição</th>
-          <td>{{ $guardaVolume->cliente->descricao ?? '---' }}</td>
+            <th>Descrição</th>
+            <td>{{ $guardaVolume->descricao ?? '---' }}</td>
           </tr>
           <tr>
-          <th>Entrada</th>
-          <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
+            <th>Entrada</th>
+            <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
           </tr>
           <tr>
-          <th>Tempo (h)</th>
-          <td>{{ $tempoGuardado }}hr</td>
+            <th>Tempo (h)</th>
+            <td>{{ $tempoGuardado }} hr</td>
           </tr>
           <tr>
-          <th>Valor a Pagar</th>
-          <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
+            <th>Valor a Pagar</th>
+            <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
           </tr>
         </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar" data-bs-dismiss="modal">
+          Finalizar Venda
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+<!-- Script modal finalizar venda -->
+@if(isset($guardaVolume))
+<script>
+    window.onload = function () {
+        const modalDetalhes = new bootstrap.Modal(document.getElementById('modalDetalhes'));
+        modalDetalhes.show();
+    }
+</script>
+@endif
 
-        {{-- Botão para abrir modal de finalizar compra --}}
-        <div class="text-end">
-          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar">
-          Finalizar venda
-          </button>
-        </div>
-      @endisset
-          </div>
-        </div>
-        {{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
-        <!-- Modal: Finalizar Compra -->
-        <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <form method="POST" action="{{ route('guarda.finalizar') }}">
-              @csrf
-              <input type="hidden" name="qrcode_id" value="{{ $guardaVolume->id ?? '' }}">
-              <input type="hidden" name="valor_base" value="{{ $valorAPagar ?? 0 }}">
-
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-                </div>
-
-                <div class="modal-body">
-                  <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
-                  <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
-                  <div class="mb-2"><strong>Tempo:</strong>
-                    <td>{{ $tempoGuardado ?? '---' }}</td> h
-                  </div>
-                  <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format($valorAPagar ?? 0, 2, ',', '.') }}
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="desconto" class="form-label">Desconto (R$)</label>
-                    <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
-                    <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
-                    <select name="formadepagamento" id="formadepagamento" class="form-select" required>
-                      <option value="" disabled selected>Escolha a forma</option>
-                      <option value="dinheiro">Dinheiro</option>
-                      <option value="pix">Pix</option>
-                      <option value="debito">Débito</option>
-                      <option value="credito">Crédito</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Confirmar Pagamento</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Fim Modal -->
-        <div class="text-end my-3">
-          <button type="button" class="btn btn-primary" id="btn-abrir-qrcode" data-user-id="{{ auth()->user()->id }}">
-            <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
-          </button>
-        </div>
+<div class="text-end my-3">
+  <button type="button" class="btn btn-primary" id="btn-abrir-qrcode" data-user-id="{{ auth()->user()->id }}">
+    <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
+  </button>
+</div>
+<!-- Fim Modal com js-->
 
         <!-- Modal -->
         <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
