@@ -12,7 +12,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 
 class QRCodeController extends Controller
 {
-   public function index()
+   public function pdv()
 {
     $qrcodes = QRCode::with(['user', 'produto'])->latest()->get();
     $produtos = Produto::latest()->get();
@@ -29,6 +29,38 @@ class QRCodeController extends Controller
     ));
 }
 
+
+public function dashboard()
+{
+    // Agrupar QR Codes por produto
+    $qrcodesPorProduto = QRCode::with('produto')
+        ->get()
+        ->groupBy('produto.descricao')
+        ->map->count();
+
+        $qrcodes = QRCode::with(['user', 'produto'])->latest()->get();
+    $produtos = Produto::latest()->get();
+    $totalQRCodes = $qrcodes->count();
+    $qrcodesUsados = $qrcodes->whereNotNull('used_at')->count();
+    $qrcodesDisponiveis = $qrcodes->whereNull('used_at')->count();
+
+    // Produtos mais usados (ex: pelos QR Codes com used_at preenchido)
+    $produtosMaisUsados = QRCode::with('produto')
+        ->whereNotNull('used_at')
+        ->get()
+        ->groupBy('produto.descricao')
+        ->map->count();
+
+    return view('admin.dashboard', [
+        'qrcodesPorProduto' => $qrcodesPorProduto,
+        'produtosMaisUsados' => $produtosMaisUsados,
+        'produtos'=>$produtos,
+        'totalQRCodes'=>$totalQRCodes,
+        'qrcodesUsados'=>$qrcodesUsados,
+        'qrcodesDisponiveis'=>$qrcodesDisponiveis,
+
+    ]);
+}
 
 
 public function gerar(Request $request)

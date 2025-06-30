@@ -15,7 +15,6 @@ use App\Http\Controllers\GuardaVolumeController;
 // ROTA DE LOGIN
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('login_validar', [LoginController::class, 'login_validar'])->name('login_validar');
-
 // ROTA INICIAL -> REDIRECIONAR PARA LOGIN
 Route::redirect('/', '/login');
 
@@ -24,11 +23,11 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // ROTAS PROTEGIDAS POR LOGIN
 Route::middleware(['auth'])->group(function () {
-
+    
     // Página inicial pós login
-    Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode.index');
+    Route::get('/pdv', [QRCodeController::class, 'pdv'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
-    Route::post('/verifica-caixa-aberto', [FluxoCaixaController::class, 'verificaCaixaAberto'])->name('caixa.verifica');
+    Route::get('/dashboard', [QRCodeController::class, 'dashboard'])->name('admin.dashboard');
 
     // Guarda Volume
     Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');
@@ -66,3 +65,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('fluxocaixa/relatorio/excel', [FluxoCaixaController::class, 'gerarExcel'])->name('fluxocaixa.relatorio.excel');
 
 }); // fechamento do grupo de rotas
+

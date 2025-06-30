@@ -30,23 +30,48 @@
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <!-- DataTables + Buttons CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<!-- jQuery (se não estiver incluído ainda) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables + Plugins -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<!-- Export files (Excel, CSV, PDF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<<<<<<< HEAD
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-=======
- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
->>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
   @vite(['resources/css/app.css', 'resources/css/custom.css', 'resources/js/app.js'])
-
 </head>
 
+<style>
+
+  .card-laranja {
+    border-top: 4px solidrgb(156, 69, 28);
+}
+.card-laranja .card-header {
+    background-color: #c56032;
+    color: #fff;
+}
+
+</style>
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+      <img class="animation__shake" src="img/logo.png" alt="AdminLTELogo" height="150" width="150">
     </div>
 
     <!-- Navbar -->
@@ -59,9 +84,9 @@
         <li class="nav-item d-none d-sm-inline-block">
           <a href="index3.html" class="nav-link">Home</a>
         </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
-        </li>
+        <!-- <li class="nav-item d-none d-sm-inline-block">
+          <a href="#" class="nav-link">Contato</a>
+        </li> -->
       </ul>
 
       <!-- Right navbar links -->
@@ -94,9 +119,9 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="#" class="brand-link">
         <img src="img/logo.png" alt="" class="brand-image " style="opacity: .8; width: 100px">
-        <span class="brand-text font-weight-light">Mesquita</span>
+        <span class="brand-text font-weight-light">.</span>
       </a>
 
       <!-- Sidebar -->
@@ -109,7 +134,7 @@
           <div class="info">
             <a href="#" class="d-block">{{ Auth::user()->name }}</a>
 
-          </div>3
+          </div>
         </div>
 
         <!-- SidebarSearch Form -->
@@ -123,86 +148,8 @@
             </div>
           </div>
         </div>
-
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <li class="nav-item">
-              <a href="pages/widgets.html" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Dashboard
-                  <!-- <span class="right badge badge-danger"></span>New -->
-                </p>
-              </a>
-            </li>
-            <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                  Relatórios
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="./index.html" class="nav-link active">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Vendas</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index2.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Mensal</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index3.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Diario</p>
-                  </a>
-                </li>
-              </ul>
-
-            </li>
-
-            <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                  Cadastros
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ url('filiais') }}" class="nav-link {{ request()->is('filiais*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Filiais</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('produtos.index') }}"
-                    class="nav-link {{ request()->is('produtos*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Produtos</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('formapagamento.index') }}" class="nav-link">
-                    <i class="fas fa-money-bill nav-icon"></i>
-                    <p>Formas de Pagamento</p>
-                  </a>
-                </li>
-
-              </ul>
-            </li>
-        </nav>
-        <!-- /.sidebar-menu -->
-      </div>
-      <!-- /.sidebar -->
-    </aside>
+        <!-- Include Menu -->
+        @include('layouts.menu')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
@@ -210,81 +157,21 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Dashboard</h1>
+              <h1 class="m-0">PDV</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{route('qrcode.index')}}">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item active">PDV</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
-
-      <!-- Main content -->
-      <section class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <!-- Total QR Codes -->
-            <div class="col-lg-3 col-6">
-              <div class="small-box bg-info">
-                <div class="inner">
-                  <h3>{{ $totalQRCodes }}</h3>
-                  <p>Total de QR Codes</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-qr-scanner"></i> <!-- Ícone relacionado a QR Codes -->
-                </div>
-
-              </div>
-            </div>
-            <!-- Usados -->
-            <div class="col-lg-3 col-6">
-              <div class="small-box bg-success">
-                <div class="inner">
-                  <h3>{{ $qrcodesUsados }}</h3>
-                  <p>QR Codes Usados</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-checkmark-circled"></i>
-                </div>
-
-              </div>
-            </div>
-            <!-- Disponíveis -->
-            <div class="col-lg-3 col-6">
-              <div class="small-box bg-warning">
-                <div class="inner">
-                  <h3>{{ $qrcodesDisponiveis }}</h3>
-                  <p>QR Codes Disponíveis</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-ios-box-outline"></i>
-                </div>
-
-              </div>
-            </div>
-            <!-- Espaço para mais algum dado se quiser -->
-            <div class="col-lg-3 col-6">
-              <div class="small-box bg-danger">
-                <div class="inner">
-                  <h3>{{ $totalQRCodes - $qrcodesUsados - $qrcodesDisponiveis }}</h3>
-                  <p>Outros Status</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-alert-circled"></i>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-
+    
         {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
-        <div class="card card-secondary mb-4">
+        <div class="card   card-laranja mb-4">
           <div class="card-header">
             <h3 class="card-title">Guarda Volume - Consulta</h3>
           </div>
@@ -292,19 +179,108 @@
             @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
       @endif
-
             {{-- Formulário de busca --}}
-            <form method="POST" action="{{ route('guarda_volume.buscar') }}" class="mb-4">
-              @csrf
-              <div class="input-group">
-                <input type="text" id="codigo_qrcode" name="codigo_qrcode" class="form-control"
-                  placeholder="Escaneie ou digite o QR Code" required autofocus>
+           {{-- Formulário de busca estilo PDV --}}
+{{-- Formulário de busca estilo PDV --}}
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="POST" action="{{ route('guarda_volume.buscar') }}">
+            @csrf
+            <div class="input-group input-group-lg">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-qrcode text-primary"></i>
+                </span>
+                <input type="text"
+                    id="codigo_qrcode"
+                    name="codigo_qrcode"
+                    class="form-control form-control-lg border-primary"
+                    placeholder="Escaneie ou digite o QR Code"
+                    required autofocus
+                    style="font-size: 1.5rem;">
+                
                 <div class="input-group-append">
-                  <button class="btn btn-outline-primary" type="submit">Buscar</button>
+                    <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
                 </div>
-              </div>
-            </form>
+            </div>
+        </form>
+    </div>
+</div>
 
+{{-- Tabela de QR Codes --}}
+<div class="table-responsive">
+    <table id="example1" class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>QR Code</th>
+                <th>Cliente</th>
+                <th>Valor</th>
+                <th>Produto</th>
+                <th>Status</th>
+                <th>Gerado por</th>
+                <th>Data de Uso</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($qrcodes as $qr)
+                <tr>
+                    <td>
+                        <div style="margin: 10px 0;">
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+                        </div>
+
+                        {{-- Conteúdo oculto para impressão --}}
+                        <div id="qrcode-{{ $qr->id }}" style="display: none;">
+                            <div style="text-align: center; font-family: Arial, sans-serif;">
+                                <h2 style="margin: 0;">Mesquita Soluções Empresariais</h2>
+                                <p style="margin: 0;">CNPJ: 17.105.516/0001-01</p>
+                                <div style="margin: 20px 0;">
+                                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+                                </div>
+                                <p><strong>Código:</strong> {{ $qr->id }}</p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>{{ $qr->cliente->nome ?? '---' }}</td>
+
+                    <td>
+                        @if (empty($qr->caixaItem->valorapagar))
+                            <span class="badge bg-danger">Pendente</span>
+                        @else
+                            R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
+                        @endif
+                    </td>
+
+                    <td>{{ $qr->produto->descricao ?? '---' }}</td>
+
+                    <td>
+                        @if ($qr->used_at)
+                            <span class="badge bg-danger">Usado</span>
+                        @else
+                            <span class="badge bg-success">Disponível</span>
+                        @endif
+                    </td>
+
+                    <td>{{ $qr->user->name ?? '---' }}</td>
+
+                    <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+
+                    <td>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
+                            <i class="bi bi-eye"></i> Ver Cliente
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
+                            <i class="bi bi-printer"></i> Imprimir QRcode
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
             @isset($guardaVolume)
         {{-- Exibe dados do QRCode encontrado --}}
         <h5>Informações do Cliente e Pertence</h5>
@@ -337,40 +313,10 @@
           Finalizar venda
           </button>
         </div>
-<<<<<<< HEAD
       @endisset
-=======
-
-          <div class="modal-body">
-          <div class="mb-2"><strong>Cliente:</strong> {{ $guardaVolume->cliente->nome ?? '---' }}</div>
-          <div class="mb-2"><strong>Pertence:</strong> {{ $guardaVolume->descricao ?? '---' }}</div>
-          <div class="mb-2"><strong>Tempo:</strong>  <td>{{ $tempoGuardado ?? '---' }}</td> h</div>
-          <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format($valorAPagar ?? 0, 2, ',', '.') }}</div>
-
-          <div class="mb-3">
-            <label for="desconto" class="form-label">Desconto (R$)</label>
-            <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
-          </div>
-
-          <div class="mb-3">
-            <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
-            <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
-          </div>
-
-          <div class="mb-3">
-            <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
-            <select name="formadepagamento" id="formadepagamento" class="form-control" required>
-              <option value="" disabled selected>Escolha a forma</option>
-              <option value="dinheiro">Dinheiro</option>
-              <option value="pix">Pix</option>
-              <option value="debito">Débito</option>
-              <option value="credito">Crédito</option>
-            </select>
->>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
           </div>
         </div>
         {{-- ↑↑↑ FIM BLOCO DE GUARDA VOLUME ↑↑↑ --}}
-
         <!-- Modal: Finalizar Compra -->
         <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel"
           aria-hidden="true">
@@ -497,131 +443,14 @@
             </form>
           </div>
         </div>
-<<<<<<< HEAD
-=======
-      </div>
-    </form>
-  </div>
-</div>
-</div>
-<!-- Fim Modal Gerar -->
-        <table id="example2" class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>QRcode</th>
-              <th>Cliente</th>
-              <th>valor pago</th>
-              <th>Produto</th>
-              <th>Status</th>
-              <th>Gerador por:</th>
-              <th>Data de Uso</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-        <tbody>
-  @foreach ($qrcodes as $qr)
-    <tr>
-  <td class="text-center">
-  <div id="qrcode-{{ $qr->id }}">
-    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-  </div>
-</td>
-
-  <td> {{ $qr->cliente->nome ?? '---' }}</td>
-  <td>
-    @if(empty($qr->caixaItem->valorapagar))
-    <span class="badge badge-danger">Pendente</span>
-    @else
-    R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
-    @endif
-  </td>
-  <td>{{ $qr->produto->descricao ?? '---' }}</td>
-        <td>
-          @if ($qr->used_at)
-          <span class="badge badge-danger">Usado</span>
-          @else
-          <span class="badge badge-success">Disponível</span>
-          @endif
-        </td>
-        <td>{{ $qr->user->name ?? '---' }}</td>
-      <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
-      <td>
-  <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
-    <i class="bi bi-eye"></i> Ver Cliente
-  </button>
-  <button
-    class="btn btn-primary btn-sm"
-    onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
-    <i class="bi bi-printer"></i> Imprimir QRcode
-  </button>
-</td>
-    </tr>
-  @endforeach
-</tbody>
-        </table>
->>>>>>> 86b9a5473c593bbc3b07c9214664d241d03817ca
     </div>
-    <!-- Fim Modal Gerar -->
-    <table id="example2" class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>QRcode</th>
-          <th>Cliente</th>
-          <th>valor</th>
-          <th>Produto</th>
-          <th>Status</th>
-          <th>Gerador por:</th>
-          <th>Data de Uso</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($qrcodes as $qr)
-        <tr>
-          <td class="text-center">
-          <div id="qrcode-{{ $qr->id }}">
-            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-          </div>
-          </td>
-
-          <td> {{ $qr->cliente->nome ?? '---' }}</td>
-          <td>
-          @if(empty($qr->caixaItem->valorapagar))
-        <span class="badge badge-danger">Pendente</span>
-        @else
-        R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
-        @endif
-          </td>
-          <td>{{ $qr->produto->descricao ?? '---' }}</td>
-          <td>
-          @if ($qr->used_at)
-        <span class="badge badge-danger">Usado</span>
-        @else
-        <span class="badge badge-success">Disponível</span>
-        @endif
-          </td>
-          <td>{{ $qr->user->name ?? '---' }}</td>
-          <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
-          <td>
-          <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
-            <i class="bi bi-eye"></i> Ver Cliente
-          </button>
-          <button class="btn btn-primary btn-sm" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
-            <i class="bi bi-printer"></i> Imprimir QRcode
-          </button>
-          </td>
-        </tr>
-    @endforeach
-      </tbody>
-    </table>
-  </div>
+   
   <!-- Modal visualizar cliente -->
   @foreach ($qrcodes as $qr)
     <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-<<<<<<< HEAD
       <div class="modal-header">
         <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
       </div>
@@ -631,40 +460,22 @@
         <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
         <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
         <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+         <td>
+        <span><strong>Qrcode:</strong></span>
+          @if ($qr->used_at)
+        <span class="badge badge-danger">Usado</span>
+        @else
+        <span class="badge badge-success">Disponível</span>
+        @endif
+          </td>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
       </div>
-=======
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
-        </div>
-        <div class="modal-body">
-          <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
-          <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
-          <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
-          <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
-          <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
-
-        <strong>QRcode:</strong>
-        <td>
-          @if ($qr->used_at)
-          <span class="badge badge-danger">Usado</span>
-          @else
-          <span class="badge badge-success">Disponível</span>
-          @endif
-        </td>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        </div>
->>>>>>> 3a1a21d451cf1e9e746b78a1d91158460b2410f5
       </div>
     </div>
     </div>
   @endforeach
-
-
   <!-- right col -->
   </div>
   <!-- /.row (main row) -->
@@ -750,22 +561,26 @@
 
   <!-- DataTables Config -->
   <script>
-    $(function () {
-      $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
+  $(function () {
+    $("#example1").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    $('#example2').DataTable({
+      paging: true,
+      lengthChange: false,
+      searching: false,
+      ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
     });
-  </script>
+  });
+</script>
+
 
   <script>
     function imprimirQRCode(elementId) {

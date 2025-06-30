@@ -40,7 +40,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // Redirecionar para a rota home (ou onde quiser)
-            return redirect()->intended('/qrcode');
+            return redirect()->intended('/dashboard');
         }
 
         // Se falhou a autenticação, volta para login com erro

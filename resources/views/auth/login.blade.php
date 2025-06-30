@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in</title>
+  <title>Mesquita  | Login</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -17,7 +17,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a href="../../index2.html"><b>Mesquita</b> Login</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -46,7 +46,7 @@
     <div class="col-8">
       <div class="icheck-primary">
         <input type="checkbox" id="remember">
-        <label for="remember">Lembrar-me</label>
+        <!-- <label for="remember">Lembrar-me</label> -->
       </div>
     </div>
     <div class="col-4">
@@ -55,7 +55,7 @@
   </div>
 </form>
 
-      <div class="social-auth-links text-center mb-3">
+      <!-- <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>
         <a href="#" class="btn btn-block btn-primary">
           <i class="fab fa-facebook mr-2"></i> Entre usando Facebook
@@ -64,15 +64,15 @@
           <i class="fab fa-google-plus mr-2"></i> Entre usando o  Google+
         </a>
       </div>
-      <!-- /.social-auth-links -->
+      /.social-auth-links -->
 
-      <p class="mb-1">
+      <!-- <p class="mb-1">
         <a href="forgot-password.html">Esqueci a senha</a>
       </p>
       <p class="mb-0">
         <a href="register.html" class="text-center">Registro de novo usuário</a>
       </p>
-    </div>
+    </div> --> 
     <!-- /.login-card-body -->
   </div>
 </div>
