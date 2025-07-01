@@ -8,6 +8,8 @@ use App\Models\FormaPagamento;
 use App\Models\CaixaItem;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode; // Pacote QRCode, veja nota abaixo
+use App\Models\Caixa;
+use Illuminate\Support\Facades\Auth;
 
 class CaixaController extends Controller
 {
@@ -20,6 +22,44 @@ class CaixaController extends Controller
         return view('caixa.index', compact('produtos', 'formasPagamento'));
     }
 
+    // Método para verificar se há caixa aberto para o usuário
+    public function verificaCaixaAberto(Request $request)
+    {
+        $iduser = $request->input('iduser');
+
+        // Verifica se existe caixa aberto (datahora_fechamento é null)
+        $caixaAberto = Caixa::where('iduser', $iduser)
+            ->whereNull('datahora_fechamento')
+            ->exists();
+
+        return response()->json(['caixa_aberto' => $caixaAberto]);
+    }
+
+    // Método para abrir o caixa (inserir registro)
+    public function abrirCaixa(Request $request)
+    {
+        
+        $request->validate([
+            'iduser' => 'required|integer',
+            'valor_inicial' => 'required|numeric|min:0',
+            'idfilial' => 'required|integer',
+        ]);
+
+        $caixa = Caixa::create([
+            'iduser' => $request->iduser,
+            'datahora_abertura' => Carbon::now(),
+            'idfilial' => $request->idfilial,
+            'total_bruto' => 0,
+            'total_desconto' => 0,
+            'total_acrescimo' => 0,
+            'total_liquido' => 0,
+            'formadepagamento' => null,
+        ]);
+
+        return response()->json(['success' => true, 'id' => $caixa->id]);
+    }
+
+    
     // Salvar os dados e gerar QR code
     public function gerarQr(Request $request)
     {
@@ -33,7 +73,7 @@ class CaixaController extends Controller
         ]);
 
         $item = new CaixaItem();
-        $item->iduser = auth()->id();
+        $item->iduser = Auth::id();
         $item->datetime = Carbon::now();
         $item->idproduto = $request->idproduto;
         $item->valor = $request->valor;

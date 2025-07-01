@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 
   <title>Mesquita | Dashboard</title>
@@ -32,21 +33,21 @@
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
   <!-- DataTables + Buttons CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 
-<!-- jQuery (se não estiver incluído ainda) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery (se não estiver incluído ainda) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables + Plugins -->
- <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <!-- DataTables + Plugins -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-<!-- Export files (Excel, CSV, PDF) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <!-- Export files (Excel, CSV, PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -55,16 +56,16 @@
 </head>
 
 <style>
-
   .card-laranja {
     border-top: 4px solidrgb(156, 69, 28);
-}
-.card-laranja .card-header {
+  }
+
+  .card-laranja .card-header {
     background-color: #c56032;
     color: #fff;
-}
-
+  }
 </style>
+
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
@@ -97,6 +98,8 @@
           </a>
           <div class="navbar-search-block">
             <form class="form-inline">
+
+
               <div class="input-group input-group-sm">
                 <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
@@ -149,338 +152,366 @@
         </div>
         <!-- Include Menu -->
         @include('layouts.menu')
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0">PDV</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{route('qrcode.index')}}">Home</a></li>
-                <li class="breadcrumb-item active">PDV</li>
-              </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-      </div>
-      <!-- /.content-header -->
-    
-        {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
-        <div class="card   card-laranja mb-4">
-          <div class="card-header">
-            <h3 class="card-title">Guarda Volume - Consulta</h3>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <div class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1 class="m-0">PDV</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{route('qrcode.index')}}">Home</a></li>
+                    <li class="breadcrumb-item active">PDV</li>
+                  </ol>
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
           </div>
-          <div class="card-body">
-            @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-      @endif
-            {{-- Formulário de busca --}}
-           {{-- Formulário de busca estilo PDV --}}
-{{-- Formulário de busca estilo PDV --}}
-<div class="card mb-4 shadow-sm">
-    <div class="card-body">
-        <form method="POST" action="{{ route('guarda_volume.buscar') }}">
-            @csrf
-            <div class="input-group input-group-lg">
-                <span class="input-group-text bg-white">
-                    <i class="fas fa-qrcode text-primary"></i>
-                </span>
-                <input type="text"
-                    id="codigo_qrcode"
-                    name="codigo_qrcode"
-                    class="form-control form-control-lg border-primary"
-                    placeholder="Escaneie ou digite o QR Code"
-                    required autofocus
-                    style="font-size: 1.5rem;">
-                
-                <div class="input-group-append">
-                    <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
-                        <i class="fas fa-search"></i> Buscar registro
-                    </button>
-                </div>
+          <!-- /.content-header -->
+
+          {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
+          <div class="card   card-laranja mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Guarda Volume - Consulta</h3>
             </div>
-        </form>
-    </div>
-</div>
+            <div class="card-body">
+              @if(session('error'))
+              <div class="alert alert-danger">{{ session('error') }}</div>
+              @endif
+              {{-- Formulário de busca --}}
+              {{-- Formulário de busca estilo PDV --}}
+              {{-- Formulário de busca estilo PDV --}}
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <form method="POST" action="{{ route('guarda_volume.buscar') }}">
+                    @csrf
+                    <div class="input-group input-group-lg">
+                      <span class="input-group-text bg-white">
+                        <i class="fas fa-qrcode text-primary"></i>
+                      </span>
+                      <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
 
- <div class="text-end my-3">
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
-    <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
-  </button>
-</div>
+                      <input type="text"
+                        id="codigo_qrcode"
+                        name="codigo_qrcode"
+                        class="form-control form-control-lg border-primary"
+                        placeholder="Escaneie ou digite o QR Code"
+                        required autofocus
+                        style="font-size: 1.5rem;">
+
+                      <div class="input-group-append">
+                        <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
+                          <i class="fas fa-search"></i> Buscar registro
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="text-end my-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
+                  <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
+                </button>
+              </div>
 
 
-{{-- Tabela de QR Codes --}}
-<div class="table-responsive">
-    <table id="example1" class="table table-bordered table-hover text-center align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>QR Code</th>
-                <th>Cliente</th>
-                <th>Valor</th>
-                <th>Produto</th>
-                <th>Status</th>
-                <th>Gerado por</th>
-                <th>Data de Uso</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($qrcodes as $qr)
-                <tr>
-                    <td>
+              {{-- Tabela de QR Codes --}}
+              <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-hover text-center align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>QR Code</th>
+                      <th>Cliente</th>
+                      <th>Valor</th>
+                      <th>Produto</th>
+                      <th>Status</th>
+                      <th>Gerado por</th>
+                      <th>Data de Uso</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($qrcodes as $qr)
+                    <tr>
+                      <td>
                         <div style="margin: 10px 0;">
-                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+                          {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
                         </div>
 
                         {{-- Conteúdo oculto para impressão --}}
                         <div id="qrcode-{{ $qr->id }}" style="display: none;">
-                            <div style="text-align: center; font-family: Arial, sans-serif;">
-                                <h2 style="margin: 0;">Mesquita Soluções Empresariais</h2>
-                                <p style="margin: 0;">CNPJ: 17.105.516/0001-01</p>
-                                <div style="margin: 20px 0;">
-                                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-                                </div>
-                                <p><strong>Código:</strong> {{ $qr->id }}</p>
+                          <div style="text-align: center; font-family: Arial, sans-serif;">
+                            <h2 style="margin: 0;">Mesquita Soluções Empresariais</h2>
+                            <p style="margin: 0;">CNPJ: 17.105.516/0001-01</p>
+                            <div style="margin: 20px 0;">
+                              {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
                             </div>
+                            <p><strong>Código:</strong> {{ $qr->id }}</p>
+                          </div>
                         </div>
-                    </td>
+                      </td>
 
-                    <td>{{ $qr->cliente->nome ?? '---' }}</td>
+                      <td>{{ $qr->cliente->nome ?? '---' }}</td>
 
-                    <td>
+                      <td>
                         @if (empty($qr->caixaItem->valorapagar))
-                            <span class="badge bg-danger">Pendente</span>
+                        <span class="badge bg-danger">Pendente</span>
                         @else
-                            R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
+                        R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
                         @endif
-                    </td>
+                      </td>
 
-                    <td>{{ $qr->produto->descricao ?? '---' }}</td>
+                      <td>{{ $qr->produto->descricao ?? '---' }}</td>
 
-                    <td>
+                      <td>
                         @if ($qr->used_at)
-                            <span class="badge bg-danger">Usado</span>
+                        <span class="badge bg-danger">Usado</span>
                         @else
-                            <span class="badge bg-success">Disponível</span>
+                        <span class="badge bg-success">Disponível</span>
                         @endif
-                    </td>
+                      </td>
 
-                    <td>{{ $qr->user->name ?? '---' }}</td>
+                      <td>{{ $qr->user->name ?? '---' }}</td>
 
-                    <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+                      <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
 
-                    <td>
+                      <td>
                         <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
-                            <i class="bi bi-eye"></i> Ver Cliente
+                          <i class="bi bi-eye"></i> Ver Cliente
                         </button>
                         <button class="btn btn-primary btn-sm" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
-                            <i class="bi bi-printer"></i> Imprimir QRcode
+                          <i class="bi bi-printer"></i> Imprimir QRcode
                         </button>
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Modal para finalizar venda -->
+              @if(isset($guardaVolume))
+              <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header card-header">
+                      <h5 class="modal-title" style="color:#fff" id="modalDetalhesLabel">Informações do Cliente e Pertence</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table table-bordered table-sm">
+                        <tr>
+                          <th>Cliente</th>
+                          <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
+                        </tr>
+                        <tr>
+                          <th>Descrição</th>
+                          <td>{{ $guardaVolume->descricao ?? '---' }}</td>
+                        </tr>
+                        <tr>
+                          <th>Entrada</th>
+                          <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
+                        </tr>
+                        <tr>
+                          <th>Tempo (h)</th>
+                          <td>{{ $tempoGuardado }} hr</td>
+                        </tr>
+                        <tr>
+                          <th>Valor a Pagar</th>
+                          <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar" data-bs-dismiss="modal">
+                        Finalizar Venda
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              @endif
+              <!-- Script modal finalizar venda -->
+              @if(isset($guardaVolume))
+              <script>
+                window.onload = function() {
+                  const modalDetalhes = new bootstrap.Modal(document.getElementById('modalDetalhes'));
+                  modalDetalhes.show();
+                }
+              </script>
+              @endif
+
+
+              <!-- Fim Modal com js-->
+              <!-- Modal: Abrir Caixa -->
+              <div class="modal fade" id="modalAbrirCaixa" tabindex="-1" aria-labelledby="modalAbrirCaixaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <form id="formAbrirCaixa">
+                    @csrf
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Abrir Caixa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="valor_inicial">Valor Inicial</label>
+                          <input type="number" step="0.01" class="form-control" name="valor_inicial" id="valor_inicial" required>
+                        </div>
+
+                        <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
+                        <input type="hidden" id="idFilialCaixa" value="{{ auth()->user()->idfilial ?? 1 }}">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Abrir Caixa</button>
+                      </div>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <form method="POST" action="{{ route('qrcode.gerar') }}">
+                    @csrf
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Gerar QR Code para Produto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
+                      </div>
+                      <div class="modal-body">
+
+                        <!-- Produto -->
+                        <div class="mb-3">
+                          <label for="produto_id" class="form-label">Produto</label>
+                          <select name="produto_id" id="produto_id" class="form-control" required>
+                            <option value="" disabled selected>Escolha um produto</option>
+                            @foreach ($produtos as $produto)
+                            <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}"
+                              data-descricao="{{ $produto->descricao }}">
+                              {{ $produto->descricao }}
+                            </option>
+                            @endforeach
+                          </select>
+                        </div>
+                        <!-- Valor -->
+                        <div class="mb-3">
+                          <label for="valor_produto" class="form-label">Valor do Produto</label>
+                          <input type="text" id="valor_produto" class="form-control" readonly>
+                        </div>
+
+                        <!-- Campos do cliente e descrição -->
+                        <div id="dados-cliente" style="display: none;">
+                          <hr>
+                          <h6>Dados do Cliente</h6>
+                          <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" name="nome" id="nome" class="form-control">
+                          </div>
+                          <div class="mb-3">
+                            <label for="cpf" class="form-label">CPF</label>
+                            <input type="text" name="cpf" id="cpf" class="form-control">
+                          </div>
+                          <div class="mb-3">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" name="email" id="email" class="form-control">
+                          </div>
+                          <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="text" name="telefone" id="telefone" class="form-control">
+                          </div>
+                          <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição do Pertence</label>
+                            <input type="text" name="descricao" id="descricao" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-success">Gerar QR Code</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                      </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal caixa aberto -->
+            <div class="modal fade" id="modalQrCode" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-body text-center">
+                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(auth()->user()->id) !!}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Modal visualizar cliente -->
+            @foreach ($qrcodes as $qr)
+            <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
+                    <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
+                    <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
+                    <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
+                    <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+                    <td>
+                      <span><strong>Qrcode:</strong></span>
+                      @if ($qr->used_at)
+                      <span class="badge badge-danger">Usado</span>
+                      @else
+                      <span class="badge badge-success">Disponível</span>
+                      @endif
                     </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-
-<!-- Modal para finalizar venda -->
-        @if(isset($guardaVolume))
-<div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header card-header">
-        <h5 class="modal-title" style="color:#fff" id="modalDetalhesLabel">Informações do Cliente e Pertence</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered table-sm">
-          <tr>
-            <th>Cliente</th>
-            <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
-          </tr>
-          <tr>
-            <th>Descrição</th>
-            <td>{{ $guardaVolume->descricao ?? '---' }}</td>
-          </tr>
-          <tr>
-            <th>Entrada</th>
-            <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
-          </tr>
-          <tr>
-            <th>Tempo (h)</th>
-            <td>{{ $tempoGuardado }} hr</td>
-          </tr>
-          <tr>
-            <th>Valor a Pagar</th>
-            <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar" data-bs-dismiss="modal">
-          Finalizar Venda
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-@endif
-<!-- Script modal finalizar venda -->
-@if(isset($guardaVolume))
-<script>
-    window.onload = function () {
-        const modalDetalhes = new bootstrap.Modal(document.getElementById('modalDetalhes'));
-        modalDetalhes.show();
-    }
-</script>
-@endif
-
-
-<!-- Fim Modal com js-->
-
-        <!-- Modal -->
-        <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form method="POST" action="{{ route('qrcode.gerar') }}">
-              @csrf
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Gerar QR Code para Produto</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-                </div>
-                <div class="modal-body">
-
-                  <!-- Produto -->
-                  <div class="mb-3">
-                    <label for="produto_id" class="form-label">Produto</label>
-                    <select name="produto_id" id="produto_id" class="form-control" required>
-                      <option value="" disabled selected>Escolha um produto</option>
-                      @foreach ($produtos as $produto)
-              <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}"
-              data-descricao="{{ $produto->descricao }}">
-              {{ $produto->descricao }}
-              </option>
-            @endforeach
-                    </select>
                   </div>
-                  <!-- Valor -->
-                  <div class="mb-3">
-                    <label for="valor_produto" class="form-label">Valor do Produto</label>
-                    <input type="text" id="valor_produto" class="form-control" readonly>
-                  </div>
-
-                  <!-- Campos do cliente e descrição -->
-                  <div id="dados-cliente" style="display: none;">
-                    <hr>
-                    <h6>Dados do Cliente</h6>
-                    <div class="mb-3">
-                      <label for="nome" class="form-label">Nome</label>
-                      <input type="text" name="nome" id="nome" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="cpf" class="form-label">CPF</label>
-                      <input type="text" name="cpf" id="cpf" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="email" class="form-label">E-mail</label>
-                      <input type="email" name="email" id="email" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="telefone" class="form-label">Telefone</label>
-                      <input type="text" name="telefone" id="telefone" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                      <label for="descricao" class="form-label">Descrição do Pertence</label>
-                      <input type="text" name="descricao" id="descricao" class="form-control">
-                    </div>
-                  </div>
-
                   <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Gerar QR Code</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                   </div>
                 </div>
-            </form>
+              </div>
+            </div>
+            @endforeach
+            <!-- right col -->
           </div>
+          <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <footer class="main-footer">
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+          <b>Version</b> 3.2.0
         </div>
-    </div>
+      </footer>
 
-    <!-- Modal caixa aberto -->
-    <div class="modal fade" id="modalQrCode" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(auth()->user()->id) !!}
-      </div>
-    </div>
-  </div>
-</div>
-
-   
-  <!-- Modal visualizar cliente -->
-  @foreach ($qrcodes as $qr)
-    <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
-      </div>
-      <div class="modal-body">
-        <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
-        <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
-        <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
-        <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
-        <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
-         <td>
-        <span><strong>Qrcode:</strong></span>
-          @if ($qr->used_at)
-        <span class="badge badge-danger">Usado</span>
-        @else
-        <span class="badge badge-success">Disponível</span>
-        @endif
-          </td>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-      </div>
-      </div>
-    </div>
-    </div>
-  @endforeach
-  <!-- right col -->
-  </div>
-  <!-- /.row (main row) -->
-  </div><!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
   </div>
 
   <script>
     // Se você tiver vários botões e quiser passar o ID do produto para o select do modal
     document.querySelectorAll('.botao-produto').forEach(botao => {
-      botao.addEventListener('click', function () {
+      botao.addEventListener('click', function() {
         const produtoId = this.dataset.produtoId;
         document.querySelector('#produto_id').value = produtoId;
       });
@@ -491,11 +522,11 @@
 
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const selectProduto = document.getElementById('produto_id');
       const inputValor = document.getElementById('valor_produto');
 
-      selectProduto.addEventListener('change', function () {
+      selectProduto.addEventListener('change', function() {
         const valor = this.options[this.selectedIndex].getAttribute('data-valor');
         if (valor) {
           inputValor.value = 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
@@ -508,7 +539,7 @@
   <!-- Dados do cliente -->
 
   <script>
-    document.getElementById('produto_id').addEventListener('change', function () {
+    document.getElementById('produto_id').addEventListener('change', function() {
       let selectedOption = this.options[this.selectedIndex];
       let valor = selectedOption.getAttribute('data-valor');
       let descricao = selectedOption.getAttribute('data-descricao');
@@ -538,75 +569,77 @@
   </script>
 
   <!-- DataTables Config -->
- <script>
-  $(function () {
-    $("#example1").DataTable({
-      responsive: true,
-      lengthChange: false,
-      autoWidth: false,
-      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      language: {
-        "sEmptyTable": "Nenhum dado disponível na tabela",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ".",
-        "sLengthMenu": "Mostrar _MENU_ registros",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sSearch": "Buscar:",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "oPaginate": {
-          "sFirst": "Primeiro",
-          "sLast": "Último",
-          "sNext": "Próximo",
-          "sPrevious": "Anterior"
-        },
-        "oAria": {
-          "sSortAscending": ": ativar para ordenar a coluna de forma crescente",
-          "sSortDescending": ": ativar para ordenar a coluna de forma decrescente"
-        },
-        "buttons": {
-          "copy": "Copiar",
-          "csv": "CSV",
-          "excel": "Excel",
-          "pdf": "PDF",
-          "print": "Imprimir",
-          "colvis": "Colunas"
+  <script>
+    $(function() {
+      $("#example1").DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        language: {
+          "sEmptyTable": "Nenhum dado disponível na tabela",
+          "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+          "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+          "sInfoPostFix": "",
+          "sInfoThousands": ".",
+          "sLengthMenu": "Mostrar _MENU_ registros",
+          "sLoadingRecords": "Carregando...",
+          "sProcessing": "Processando...",
+          "sSearch": "Buscar:",
+          "sZeroRecords": "Nenhum registro encontrado",
+          "oPaginate": {
+            "sFirst": "Primeiro",
+            "sLast": "Último",
+            "sNext": "Próximo",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending": ": ativar para ordenar a coluna de forma crescente",
+            "sSortDescending": ": ativar para ordenar a coluna de forma decrescente"
+          },
+          "buttons": {
+            "copy": "Copiar",
+            "csv": "CSV",
+            "excel": "Excel",
+            "pdf": "PDF",
+            "print": "Imprimir",
+            "colvis": "Colunas"
+          }
         }
-      }
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-    $('#example2').DataTable({
-      paging: true,
-      lengthChange: false,
-      searching: false,
-      ordering: true,
-      info: true,
-      autoWidth: false,
-      responsive: true,
-      language: {
-        "sEmptyTable": "Nenhum dado disponível na tabela",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
-        "sLengthMenu": "Mostrar _MENU_ registros",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sSearch": "Buscar:",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "oPaginate": {
-          "sFirst": "Primeiro",
-          "sLast": "Último",
-          "sNext": "Próximo",
-          "sPrevious": "Anterior"
+      $('#example2').DataTable({
+        paging: true,
+        lengthChange: false,
+        searching: false,
+        ordering: true,
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        language: {
+          "sEmptyTable": "Nenhum dado disponível na tabela",
+          "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+          "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+          "sLengthMenu": "Mostrar _MENU_ registros",
+          "sLoadingRecords": "Carregando...",
+          "sProcessing": "Processando...",
+          "sSearch": "Buscar:",
+          "sZeroRecords": "Nenhum registro encontrado",
+          "oPaginate": {
+            "sFirst": "Primeiro",
+            "sLast": "Último",
+            "sNext": "Próximo",
+            "sPrevious": "Anterior"
+          }
         }
-      }
+      });
     });
-  });
-</script>
+  </script>
 
+
+  </script>
   <script>
     function imprimirQRCode(elementId) {
       const qrContent = document.getElementById(elementId).innerHTML;
@@ -634,8 +667,73 @@
     `);
       printWindow.document.close();
     }
+
+    // Verifica se tem caixa aberto
+    document.addEventListener('DOMContentLoaded', function() {
+      const iduser = document.getElementById('idUserCaixa').value;
+
+      fetch('/verifica-caixa-aberto', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            iduser
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.caixa_aberto) {
+            alert('Você já tem um caixa aberto.');
+          } else {
+            // Exibe o modal para preenchimento do valor inicial
+            const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
+            modal.show();
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao verificar caixa:', err);
+          alert('Erro ao verificar caixa. Veja o console.');
+        });
+    });
+
+document.getElementById('formAbrirCaixa').addEventListener('submit', function (e) {
+  e.preventDefault(); // Impede envio tradicional
+
+  const iduser = document.getElementById('idUserCaixa').value;
+  const idfilial = document.getElementById('idFilialCaixa').value;
+  const valor_inicial = document.getElementById('valor_inicial').value;
+
+  fetch('/abrir-caixa', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify({ iduser, idfilial, valor_inicial })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Caixa aberto com sucesso! ID: ' + data.id);
+      // Fecha o modal
+      const modal = bootstrap.Modal.getInstance(document.getElementById('modalAbrirCaixa'));
+      modal.hide();
+    } else {
+      alert('Erro ao abrir caixa: ' + (data.message || 'Desconhecido'));
+    }
+  })
+  .catch(err => {
+    console.error('Erro ao abrir caixa:', err);
+    alert('Erro ao abrir caixa. Veja o console.');
+  });
+});
+
+    
   </script>
-  
+
+
   <!-- <script>
 document.getElementById('btn-abrir-qrcode').addEventListener('click', function () {
   const userId = this.dataset.userId;
@@ -660,6 +758,7 @@ document.getElementById('btn-abrir-qrcode').addEventListener('click', function (
   .catch(() => alert('Erro ao verificar o caixa.'));
 });
 </script> -->
+
 
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
@@ -698,18 +797,18 @@ document.getElementById('btn-abrir-qrcode').addEventListener('click', function (
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ asset('js/modal_qrcode.js?v=1.01') }}"></script>
 
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="plugins/jszip/jszip.min.js"></script>
+  <script src="plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 </body>
 
