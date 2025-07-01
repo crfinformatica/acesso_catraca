@@ -76,8 +76,23 @@
                   </a>
                 </li>
 
-              </ul>
-            </li>
+                 <!-- Link Sair fixo no rodapé da sidebar -->
+           
+              </li>
+                <ul class="nav nav-pills nav-sidebar flex-column mt-auto mb-3">
+                  <li class="nav-item">
+                    <a href="{{ route('logout') }}" 
+                      class="nav-link text-white bg-danger"
+                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                      <i class="fas fa-sign-out-alt nav-icon"></i>
+                      <p>Sair</p>
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                      @csrf
+                    </form>
+                  </li>
+                </ul>
         </nav>
         <!-- /.sidebar-menu -->
       </div>

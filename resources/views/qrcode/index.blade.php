@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
+
 
   <title>Mesquita | Dashboard</title>
 
@@ -38,11 +39,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- DataTables + Plugins -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+ <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 <!-- Export files (Excel, CSV, PDF) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -200,7 +199,7 @@
                 
                 <div class="input-group-append">
                     <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
-                        <i class="fas fa-search"></i> Buscar
+                        <i class="fas fa-search"></i> Buscar registro
                     </button>
                 </div>
             </div>
@@ -208,14 +207,12 @@
     </div>
 </div>
 
-  {{-- SEÇÃO VISUAL PROFISSIONAL --}}
-        <div class="d-flex align-items-center mb-3">
-            <div class="flex-grow-1 border-bottom border-secondary"></div>
-            <div class="px-3 text-muted fw-bold" style="white-space: nowrap;">
-            
-            </div>
-            <div class="flex-grow-1 border-bottom border-secondary"></div>
-        </div>
+ <div class="text-end my-3">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
+    <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
+  </button>
+</div>
+
 
 {{-- Tabela de QR Codes --}}
 <div class="table-responsive">
@@ -344,11 +341,7 @@
 </script>
 @endif
 
-<div class="text-end my-3">
-  <button type="button" class="btn btn-primary" id="btn-abrir-qrcode" data-user-id="{{ auth()->user()->id }}">
-    <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
-  </button>
-</div>
+
 <!-- Fim Modal com js-->
 
         <!-- Modal -->
@@ -417,6 +410,18 @@
           </div>
         </div>
     </div>
+
+    <!-- Modal caixa aberto -->
+    <div class="modal fade" id="modalQrCode" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(auth()->user()->id) !!}
+      </div>
+    </div>
+  </div>
+</div>
+
    
   <!-- Modal visualizar cliente -->
   @foreach ($qrcodes as $qr)
@@ -533,13 +538,44 @@
   </script>
 
   <!-- DataTables Config -->
-  <script>
+ <script>
   $(function () {
     $("#example1").DataTable({
       responsive: true,
       lengthChange: false,
       autoWidth: false,
-      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+      language: {
+        "sEmptyTable": "Nenhum dado disponível na tabela",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sSearch": "Buscar:",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "oPaginate": {
+          "sFirst": "Primeiro",
+          "sLast": "Último",
+          "sNext": "Próximo",
+          "sPrevious": "Anterior"
+        },
+        "oAria": {
+          "sSortAscending": ": ativar para ordenar a coluna de forma crescente",
+          "sSortDescending": ": ativar para ordenar a coluna de forma decrescente"
+        },
+        "buttons": {
+          "copy": "Copiar",
+          "csv": "CSV",
+          "excel": "Excel",
+          "pdf": "PDF",
+          "print": "Imprimir",
+          "colvis": "Colunas"
+        }
+      }
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     $('#example2').DataTable({
@@ -550,10 +586,26 @@
       info: true,
       autoWidth: false,
       responsive: true,
+      language: {
+        "sEmptyTable": "Nenhum dado disponível na tabela",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sSearch": "Buscar:",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "oPaginate": {
+          "sFirst": "Primeiro",
+          "sLast": "Último",
+          "sNext": "Próximo",
+          "sPrevious": "Anterior"
+        }
+      }
     });
   });
 </script>
-
 
   <script>
     function imprimirQRCode(elementId) {
@@ -583,7 +635,8 @@
       printWindow.document.close();
     }
   </script>
-  <script>
+  
+  <!-- <script>
 document.getElementById('btn-abrir-qrcode').addEventListener('click', function () {
   const userId = this.dataset.userId;
 
@@ -606,7 +659,7 @@ document.getElementById('btn-abrir-qrcode').addEventListener('click', function (
   })
   .catch(() => alert('Erro ao verificar o caixa.'));
 });
-</script>
+</script> -->
 
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
@@ -643,8 +696,20 @@ document.getElementById('btn-abrir-qrcode').addEventListener('click', function (
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script src="{{ asset('js/modal_qrcode.js?v=1.01') }}"></script>
+
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 </body>
 
