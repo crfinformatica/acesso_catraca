@@ -1,7 +1,7 @@
 
 :root {
-    --grafite: #ffffff;
-    --preto: #313131;
+    --grafite: #fffbfb;
+    --preto: hsl(0, 3%, 14%);
     --laranja: #c56032;
     --azul: #2757a4;
 }
