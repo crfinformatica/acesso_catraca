@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\QRCode;
 use App\Models\Produto;
 use App\Models\Cliente;
+use App\Models\FormaPagamento;
+
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 
 class QRCodeController extends Controller
@@ -19,13 +21,15 @@ class QRCodeController extends Controller
     $totalQRCodes = $qrcodes->count();
     $qrcodesUsados = $qrcodes->whereNotNull('used_at')->count();
     $qrcodesDisponiveis = $qrcodes->whereNull('used_at')->count();
+   $formasPagamentos = FormaPagamento::all();
 
     return view('qrcode.index', compact(
         'qrcodes',
         'produtos',
         'totalQRCodes',
         'qrcodesUsados',
-        'qrcodesDisponiveis'
+        'qrcodesDisponiveis',
+        'formasPagamentos'
     ));
 }
 
@@ -65,36 +69,52 @@ public function dashboard()
 
 public function gerar(Request $request)
 {
-    // Validação dos campos
+    // Valida só o produto_id inicialmente
     $data = $request->validate([
         'produto_id' => 'required|exists:produtos,idproduto',
-        'nome'       => 'required|string|max:255',
-        'cpf'        => 'nullable|string|max:20',
-        'email'      => 'nullable|email|max:255',
-        'telefone'   => 'nullable|string|max:20',
-        'descricao'  => 'required|string|max:255', // será salva no cliente
     ]);
 
-    // Criar cliente com descrição do pertence
-    $cliente = Cliente::create([
-        'nome'      => $data['nome'],
-        'cpf'       => $data['cpf'],
-        'email'     => $data['email'],
-        'telefone'  => $data['telefone'],
-    ]);
+    // Busca o produto para verificar a descrição
+    $produto = Produto::where('idproduto', $data['produto_id'])->first();
 
-    // Criar o QRCode atrelado ao cliente
-    QRCode::create([
-        'code'        => \Str::uuid()->toString(),
-        'user_id'     => auth()->id(),
-        'produto_id'  => $data['produto_id'],
-        'cliente_id'  => $cliente->id,
-        'entrada_em'  => now(),
-        'descricao' => $data['descricao'], // PERTENCE
+    // Se for Guarda Volume, valida os campos do cliente também
+    if ($produto && strtolower($produto->descricao) === 'guarda volume') {
+        $dataCliente = $request->validate([
+            'nome'       => 'required|string|max:255',
+            'cpf'        => 'nullable|string|max:20',
+            'email'      => 'nullable|email|max:255',
+            'telefone'   => 'nullable|string|max:20',
+            'descricao'  => 'required|string|max:255',
+        ]);
 
-    ]);
+        // Cria cliente
+        $cliente = Cliente::create([
+            'nome'      => $dataCliente['nome'],
+            'cpf'       => $dataCliente['cpf'] ?? null,
+            'email'     => $dataCliente['email'] ?? null,
+            'telefone'  => $dataCliente['telefone'] ?? null,
+        ]);
 
-    return redirect()->route('qrcode.index')->with('mensagem', 'QR Code e Cliente criados com sucesso!');
+        // Cria QRCode com cliente atrelado
+        QRCode::create([
+            'code'        => \Str::uuid()->toString(),
+            'user_id'     => auth()->id(),
+            'produto_id'  => $data['produto_id'],
+            'cliente_id'  => $cliente->id,
+            'entrada_em'  => now(),
+            'descricao'   => $dataCliente['descricao'], // Descrição do pertence
+        ]);
+    } else {
+        // Se não for guarda volume, cria só o QRCode sem cliente
+        QRCode::create([
+            'code'        => \Str::uuid()->toString(),
+            'user_id'     => auth()->id(),
+            'produto_id'  => $data['produto_id'],
+            'entrada_em'  => now(),
+        ]);
+    }
+
+    return redirect()->route('qrcode.index')->with('mensagem', 'QR Code criado com sucesso!');
 }
 
 

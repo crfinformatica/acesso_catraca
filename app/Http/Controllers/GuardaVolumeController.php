@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\QRCode;
 use App\Models\Produto;
 use App\Models\Cliente;
+use App\Models\FormaPagamento;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 
@@ -77,7 +78,7 @@ if (!$qr || $qr->produto->descricao !== 'Guarda Volume') {
     $qrcodesDisponiveis = $qrcodes->whereNull('used_at')->count();
     $produtos = Produto::all();
     $qrcodes = QRCode::with(['user', 'produto'])->latest()->get();
-
+    $formasPagamentos = FormaPagamento::all();
     $entrada = $qr->entrada_em ? Carbon::parse($qr->entrada_em) : $qr->created_at;
     $saida = Carbon::now();
 
@@ -88,16 +89,19 @@ if (!$qr || $qr->produto->descricao !== 'Guarda Volume') {
     $valorBase = $qr->produto->valor ?? 10.00;
     $valorAPagar = $valorBase * $diasCompletosOuFracionados;
 
-return view('qrcode.index', [
-    'guardaVolume' => $qr,
-    'tempoGuardado' => $tempoEmHoras, // mostra o tempo total em horas, se preferir pode mudar para dias
-    'valorAPagar' => $valorAPagar,
-    'totalQRCodes'=> $totalQRCodes,
-    'qrcodesUsados'=> $qrcodesUsados,
-    'qrcodesDisponiveis' => $qrcodesDisponiveis,
-    'qrcodes' => $qrcodes,
-    'produtos' => $produtos
+return redirect()->route('qrcode.index')->with([
+    'guardaVolume'         => $qr,
+    'tempoGuardado'        => $tempoEmHoras,
+    'valorAPagar'          => $valorAPagar,
+    'totalQRCodes'         => $totalQRCodes,
+    'qrcodesUsados'        => $qrcodesUsados,
+    'qrcodesDisponiveis'   => $qrcodesDisponiveis,
+    'qrcodes'              => $qrcodes,
+    'produtos'             => $produtos,
+    'formasPagamentos'      => $formasPagamentos,
+    'abrir_modal'          => true, // ✅ Aqui já dentro do mesmo array
 ]);
+
 
 }
 

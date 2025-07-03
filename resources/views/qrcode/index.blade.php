@@ -5,9 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
-
   <title>Mesquita | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -59,14 +56,15 @@
   .card-laranja {
     border-top: 4px solidrgb(156, 69, 28);
   }
-
   .card-laranja .card-header {
-    background-color: #c56032;
+    background-color: #2757a4;
     color: #fff;
   }
+
+
 </style>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed" >
   <div class="wrapper">
 
     <!-- Preloader -->
@@ -79,7 +77,7 @@
       <!-- Left navbar links -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="color:#fff; background-color:#0056b3;"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
           <a href="index3.html" class="nav-link">Home</a>
@@ -98,10 +96,8 @@
           </a>
           <div class="navbar-search-block">
             <form class="form-inline">
-
-
               <div class="input-group input-group-sm">
-                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-navbar"  type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
                   <button class="btn btn-navbar" type="submit">
                     <i class="fas fa-search"></i>
@@ -119,7 +115,7 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" style="border-right: 1px solid #0056b3;">
       <!-- Brand Logo -->
       <a href="#" class="brand-link">
         <img src="img/logo.png" alt="" class="brand-image " style="opacity: .8; width: 100px">
@@ -131,58 +127,43 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2">
+            <img src="img/logo.png" class="img-circle elevation-2">
           </div>
           <div class="info">
-            <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-
+            <a href="#" class="d-block" style="color:#fff"> {{ Auth::user()->name }}</a>
           </div>
         </div>
 
         <!-- SidebarSearch Form -->
-        <div class="form-inline">
-          <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-sidebar">
-                <i class="fas fa-search fa-fw"></i>
-              </button>
-            </div>
-          </div>
+            <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+              <input class="form-control form-control-sidebar bg-white text-dark" 
+                    type="search" placeholder="Buscar" aria-label="Buscar"
+                    style="border: 1px solid #ccc;">
+              <div class="input-group-append">
+              <button class="btn btn-sidebar bg-white text-primary" style="border: 1px solid #ccc;">
+            <i class="fas fa-search fa-fw"></i>
+          </button>
         </div>
-        <!-- Include Menu -->
+      </div>
+    </div>
+
+  <!-- Include Menu -->
         @include('layouts.menu')
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
           <!-- Content Header (Page header) -->
-          <div class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6">
-                  <h1 class="m-0">PDV</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{route('qrcode.index')}}">Home</a></li>
-                    <li class="breadcrumb-item active">PDV</li>
-                  </ol>
-                </div><!-- /.col -->
-              </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-          </div>
-          <!-- /.content-header -->
+      
 
           {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
-          <div class="card   card-laranja mb-4">
+          <!-- <div class="card   card-laranja mb-4"> -->
             <div class="card-header">
-              <h3 class="card-title">Guarda Volume - Consulta</h3>
+              <!-- <h3 class="card-title">Guarda Volume - Consulta</h3> -->
             </div>
             <div class="card-body">
               @if(session('error'))
               <div class="alert alert-danger">{{ session('error') }}</div>
               @endif
-              {{-- Formulário de busca --}}
-              {{-- Formulário de busca estilo PDV --}}
               {{-- Formulário de busca estilo PDV --}}
               <div class="card mb-4 shadow-sm">
                 <div class="card-body">
@@ -202,11 +183,11 @@
                         required autofocus
                         style="font-size: 1.5rem;">
 
-                      <div class="input-group-append">
+                      <!-- <div class="input-group-append">
                         <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
                           <i class="fas fa-search"></i> Buscar registro
                         </button>
-                      </div>
+                      </div> -->
                     </div>
                   </form>
                 </div>
@@ -218,11 +199,10 @@
                 </button>
               </div>
 
-
               {{-- Tabela de QR Codes --}}
               <div class="table-responsive">
                 <table id="example1" class="table table-bordered table-hover text-center align-middle">
-                  <thead class="table-light">
+                  <thead class="table-light" style="color: #fff; background-color: #2757a4">
                     <tr>
                       <th>QR Code</th>
                       <th>Cliente</th>
@@ -255,7 +235,7 @@
                         </div>
                       </td>
 
-                      <td>{{ $qr->cliente->nome ?? '---' }}</td>
+                      <td>{{ $qr->cliente->nome ?? 'Geral' }}</td>
 
                       <td>
                         @if (empty($qr->caixaItem->valorapagar))
@@ -293,61 +273,70 @@
                 </table>
               </div>
 
-              <!-- Modal para finalizar venda -->
-              @if(isset($guardaVolume))
-              <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header card-header">
-                      <h5 class="modal-title" style="color:#fff" id="modalDetalhesLabel">Informações do Cliente e Pertence</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                      <table class="table table-bordered table-sm">
-                        <tr>
-                          <th>Cliente</th>
-                          <td>{{ $guardaVolume->cliente->nome ?? '---' }}</td>
-                        </tr>
-                        <tr>
-                          <th>Descrição</th>
-                          <td>{{ $guardaVolume->descricao ?? '---' }}</td>
-                        </tr>
-                        <tr>
-                          <th>Entrada</th>
-                          <td>{{ $guardaVolume->created_at->format('d/m/Y H:i') ?? '---' }}</td>
-                        </tr>
-                        <tr>
-                          <th>Tempo (h)</th>
-                          <td>{{ $tempoGuardado }} hr</td>
-                        </tr>
-                        <tr>
-                          <th>Valor a Pagar</th>
-                          <td>R$ {{ number_format($valorAPagar, 2, ',', '.') }}</td>
-                        </tr>
-                      </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalFinalizar" data-bs-dismiss="modal">
-                        Finalizar Venda
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              @endif
-              <!-- Script modal finalizar venda -->
-              @if(isset($guardaVolume))
-              <script>
-                window.onload = function() {
-                  const modalDetalhes = new bootstrap.Modal(document.getElementById('modalDetalhes'));
-                  modalDetalhes.show();
-                }
-              </script>
-              @endif
+  <!-- Modal para finalizar venda -->
+    @if(session('guardaVolume'))
+<!-- Modal: Finalizar Pagamento -->
+<div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('guarda.finalizar') }}">
+      @csrf
+      <input type="hidden" name="qrcode_id" value="{{ session('guardaVolume')->id }}">
+      <input type="hidden" name="valor_base" value="{{ session('valorAPagar') }}">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-2"><strong>Cliente:</strong> {{ session('guardaVolume')->cliente->nome ?? '---' }}</div>
+          <div class="mb-2"><strong>Pertence:</strong> {{ session('guardaVolume')->descricao ?? '---' }}</div>
+          <div class="mb-2"><strong>Tempo:</strong> {{ session('tempoGuardado') ?? '---' }} h</div>
+          <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format(session('valorAPagar') ?? 0, 2, ',', '.') }}</div>
+
+          <div class="mb-3">
+            <label for="desconto" class="form-label">Desconto (R$)</label>
+            <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
+          </div>
+
+          <div class="mb-3">
+            <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
+            <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
+          </div>
+
+          <div class="mb-3">
+          <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
+          <select name="formadepagamento" id="formadepagamento" class="form-control" required>
+            <option value="" disabled selected>Escolha a forma</option>
+            @foreach($formasPagamentos as $forma)
+              <option value="{{ $forma->descricao }}">{{ $forma->descricao }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+@endif
+
+@if(session('abrir_modal'))
+<script>
+  window.onload = function () {
+    var modal = new bootstrap.Modal(document.getElementById('modalFinalizar'));
+    modal.show();
+  };
+</script>
+@endif
+<!-- Fim Modal finalizar venda com js-->
 
 
-              <!-- Fim Modal com js-->
               <!-- Modal: Abrir Caixa -->
               <div class="modal fade" id="modalAbrirCaixa" tabindex="-1" aria-labelledby="modalAbrirCaixaLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -494,7 +483,7 @@
       </div>
       <!-- /.content-wrapper -->
       <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; 2014-2021 <a href="#">Mesquita</a>.</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
           <b>Version</b> 3.2.0
@@ -732,33 +721,6 @@ document.getElementById('formAbrirCaixa').addEventListener('submit', function (e
 
     
   </script>
-
-
-  <!-- <script>
-document.getElementById('btn-abrir-qrcode').addEventListener('click', function () {
-  const userId = this.dataset.userId;
-
-  fetch('/verifica-caixa-aberto', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    },
-    body: JSON.stringify({ iduser: userId }),
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.caixa_aberto) {
-      const modal = new bootstrap.Modal(document.getElementById('modalQrCode'));
-      modal.show();
-    } else {
-      alert('Nenhum caixa aberto para este usuário.');
-    }
-  })
-  .catch(() => alert('Erro ao verificar o caixa.'));
-});
-</script> -->
-
 
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
