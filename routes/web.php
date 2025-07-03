@@ -10,6 +10,7 @@ use App\Http\Controllers\AcessoController;
 use App\Http\Controllers\TesteImageController;
 use App\Http\Controllers\FilialController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\FormaPagamentoController;
 use App\Http\Controllers\GuardaVolumeController;
 use App\Http\Controllers\CaixaController;
 
@@ -31,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [QRCodeController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/verifica-caixa-aberto', [CaixaController::class, 'verificaCaixaAberto'])->name('caixa.verifica');
     Route::post('/abrir-caixa', [CaixaController::class, 'abrirCaixa'])->name('caixa.abrir');
+    Route::post('/caixa/{id}/fechar', [CaixaController::class, 'fecharCaixa']);
+
     // Guarda Volume
     Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');
     Route::post('/busca', [GuardaVolumeController::class, 'buscar'])->name('guarda_volume.buscar');
@@ -52,7 +55,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Forma de pagamento
-    Route::get('/formapagamento.index', [QRCodeController::class, 'index'])->name('formapagamento.index');
+    Route::get('/forma-pagamento', [FormaPagamentoController::class, 'index'])->name('forma-pagamento.index');
+    Route::get('/formapagamento/edit', [FormaPagamentoController::class, 'edit'])->name('formapagamento.edit');
+    Route::get('/formapagamento/create', [FormaPagamentoController::class, 'create'])->name('formapagamento.create');
+    Route::get('/formapagamento/create', [FormaPagamentoController::class, 'create'])->name('formapagamento.create');
+    Route::get('/formapagamento/destroy', [FormaPagamentoController::class, 'destroy'])->name('formapagamento.destroy');
+    
 
     // Cadastros
     Route::resource('filiais', FilialController::class);

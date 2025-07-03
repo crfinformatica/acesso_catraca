@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+ @include('layouts.menu')
 
 
 @section('title', 'Fluxo de Caixa')

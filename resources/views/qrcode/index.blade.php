@@ -684,9 +684,9 @@
         })
         .then(res => res.json())
         .then(data => {
-          if (data.caixa_aberto) {
-            alert('Você já tem um caixa aberto.');
-          } else {
+          if (!data.caixa_aberto) {
+            alert('Você não tem um caixa aberto.');
+          
             // Exibe o modal para preenchimento do valor inicial
             const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
             modal.show();

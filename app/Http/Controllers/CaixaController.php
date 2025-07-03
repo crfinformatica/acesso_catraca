@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Produto; // Assumindo que existe
+use App\Models\Produto;
 use App\Models\FormaPagamento;
 use App\Models\CaixaItem;
-use Carbon\Carbon;
-use SimpleSoftwareIO\QrCode\Facades\QrCode; // Pacote QRCode, veja nota abaixo
 use App\Models\Caixa;
+use App\Models\FluxoCaixa;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CaixaController extends Controller
 {
@@ -27,7 +29,6 @@ class CaixaController extends Controller
     {
         $iduser = $request->input('iduser');
 
-        // Verifica se existe caixa aberto (datahora_fechamento é null)
         $caixaAberto = Caixa::where('iduser', $iduser)
             ->whereNull('datahora_fechamento')
             ->exists();
@@ -38,7 +39,6 @@ class CaixaController extends Controller
     // Método para abrir o caixa (inserir registro)
     public function abrirCaixa(Request $request)
     {
-        
         $request->validate([
             'iduser' => 'required|integer',
             'valor_inicial' => 'required|numeric|min:0',
@@ -59,7 +59,6 @@ class CaixaController extends Controller
         return response()->json(['success' => true, 'id' => $caixa->id]);
     }
 
-    
     // Salvar os dados e gerar QR code
     public function gerarQr(Request $request)
     {
@@ -83,7 +82,6 @@ class CaixaController extends Controller
         $item->formadepagamento = $request->formadepagamento;
         $item->save();
 
-        // Gerar QR code com dados (texto simples)
         $data = "Pagamento: R$ " . number_format($item->valorapagar, 2, ',', '.') . " via " . $item->formadepagamento;
         $qrcode = QrCode::size(250)->generate($data);
 
@@ -91,5 +89,65 @@ class CaixaController extends Controller
             'success' => true,
             'qrcode' => $qrcode
         ]);
+    }
+
+    // ✅ Método para fechar o caixa e registrar no fluxo_caixa
+    public function fecharCaixa(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $caixa = Caixa::findOrFail($id);
+
+            if ($caixa->datahora_fechamento) {
+                return response()->json(['erro' => 'Caixa já está fechado.'], 400);
+            }
+
+            $itens = CaixaItem::where('iduser', $caixa->iduser)
+                ->whereBetween('datetime', [$caixa->datahora_abertura, now()])
+                ->selectRaw('formadepagamento, SUM(valor) as total_bruto, SUM(desconto) as total_desconto, SUM(acrescimo) as total_acrescimo, SUM(valorapagar) as total_liquido')
+                ->groupBy('formadepagamento')
+                ->get();
+
+            $totalBruto = 0;
+            $totalDesconto = 0;
+            $totalAcrescimo = 0;
+            $totalLiquido = 0;
+
+            foreach ($itens as $item) {
+                $totalBruto += $item->total_bruto;
+                $totalDesconto += $item->total_desconto;
+                $totalAcrescimo += $item->total_acrescimo;
+                $totalLiquido += $item->total_liquido;
+
+                FluxoCaixa::create([
+                    'iduser' => $caixa->iduser,
+                    'descricao' => "Fechamento de caixa #{$caixa->id} ({$item->formadepagamento})",
+                    'valor' => $item->total_liquido,
+                    'tipo' => 'ENTRADA',
+                    'categoria' => 'Fechamento de Caixa',
+                    'data_movimento' => now(),
+                    'formadepagamento' => $item->formadepagamento,
+                    'id_caixa' => $caixa->id,
+                ]);
+            }
+
+            $caixa->update([
+                'total_bruto' => $totalBruto,
+                'total_desconto' => $totalDesconto,
+                'total_acrescimo' => $totalAcrescimo,
+                'total_liquido' => $totalLiquido,
+                'datahora_fechamento' => now(),
+                'datafechamento' => now()->toDateString(),
+            ]);
+
+            DB::commit();
+
+            return response()->json(['success' => 'Caixa fechado com sucesso.']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['erro' => 'Erro ao fechar caixa: ' . $e->getMessage()], 500);
+        }
     }
 }

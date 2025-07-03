@@ -3,13 +3,18 @@
 @section('content')
 <div class="container">
 
+  <!-- Botões de ações -->
   <div class="text-end my-3">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
       <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
     </button>
+
+    <button type="button" class="btn btn-danger" onclick="abrirConfirmacaoFechamento({{ auth()->id() }})">
+      <i class="bi bi-lock"></i> Fechar Caixa
+    </button>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal QR Code -->
   <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form id="formQrCode">
@@ -73,6 +78,26 @@
       </form>
     </div>
   </div>
+
+  <!-- Modal Fechar Caixa -->
+  <div class="modal fade" id="modalFecharCaixa" tabindex="-1" aria-labelledby="modalFecharCaixaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalFecharCaixaLabel">Fechar Caixa</h5>
+          <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja fechar o caixa atual? Essa ação é irreversível.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" id="btnConfirmarFechamento">Sim, Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 @endsection
 
@@ -88,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const resultadoQrCode = document.getElementById('resultadoQrCode');
   const formQrCode = document.getElementById('formQrCode');
 
-  // Atualiza valor ao selecionar produto
   idproduto.addEventListener('change', function() {
     const option = idproduto.options[idproduto.selectedIndex];
     const val = parseFloat(option.getAttribute('data-valor'));
@@ -96,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
     calculaTotal();
   });
 
-  // Atualiza total quando desconto ou acrescimo mudam
   desconto.addEventListener('input', calculaTotal);
   acrescimo.addEventListener('input', calculaTotal);
 
@@ -109,12 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
     valorapagar.value = total.toFixed(2).replace('.', ',');
   }
 
-  // Submeter formulário via AJAX
   formQrCode.addEventListener('submit', function(e) {
     e.preventDefault();
     resultadoQrCode.innerHTML = '';
 
-    // Dados para enviar
     const data = {
       _token: document.querySelector('input[name="_token"]').value,
       idproduto: idproduto.value,
@@ -146,6 +167,46 @@ document.addEventListener('DOMContentLoaded', function() {
       resultadoQrCode.innerHTML = '<div class="alert alert-danger">Erro na comunicação</div>';
     });
   });
+});
+
+// Fechamento de caixa
+let idCaixaAberto = null;
+
+function abrirConfirmacaoFechamento(idUser) {
+  fetch(`/api/caixa-aberto/${idUser}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.id) {
+        alert("Nenhum caixa aberto encontrado.");
+        return;
+      }
+
+      idCaixaAberto = data.id;
+      const modal = new bootstrap.Modal(document.getElementById('modalFecharCaixa'));
+      modal.show();
+    })
+    .catch(() => alert("Erro ao verificar caixa."));
+}
+
+document.getElementById('btnConfirmarFechamento').addEventListener('click', function () {
+  if (!idCaixaAberto) return;
+
+  fetch(`/caixa/${idCaixaAberto}/fechar`, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.success);
+      location.reload();
+    } else {
+      alert(data.erro || 'Erro ao fechar caixa.');
+    }
+  })
+  .catch(() => alert("Erro na requisição ao fechar caixa."));
 });
 </script>
 @endpush

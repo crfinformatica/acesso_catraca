@@ -3,115 +3,95 @@
 namespace App\Http\Controllers;
 
 use App\Models\FluxoCaixa;
-use App\Models\Filial;
 use Illuminate\Http\Request;
-use PDF;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\FluxoCaixaExport;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class FluxoCaixaController extends Controller
 {
     public function index()
     {
-        $lancamentos = FluxoCaixa::with('filial')->get();
-        return view('fluxocaixa.index', compact('lancamentos'));
+        return redirect()->route('fluxocaixa.relatorio');
     }
 
-    public function create()
-    {
-        $filiais = Filial::all();
-        return view('fluxocaixa.create', compact('filiais'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'idfilial' => 'required|exists:filiais,id',
-            'tipo' => 'required|in:Crédito,Débito',
-            'valor' => 'required|numeric|min:0',
-            'descricao' => 'required|string|max:255',
-            'dataregistro' => 'required|date',
-        ]);
-
-        FluxoCaixa::create($request->only(['idfilial', 'tipo', 'valor', 'descricao', 'dataregistro']));
-        return redirect()->route('fluxocaixa.index')->with('success', 'Movimento registrado com sucesso!');
-    }
-
-    // 🔎 Exibir formulário do relatório
+    /**
+     * Exibe o formulário para gerar o relatório.
+     */
     public function relatorio()
     {
-        $filiais = Filial::all();
-        return view('fluxocaixa.relatorio', compact('filiais'));
+        return view('fluxocaixa.relatorio');
     }
 
-    // 🔍 Buscar resultado filtrado
+    /**
+     * Gera o resultado do relatório com base nas datas fornecidas.
+     */
     public function relatorioResultado(Request $request)
     {
         $request->validate([
-            'idfilial' => 'nullable|exists:filiais,id',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date|after_or_equal:data_inicio',
+            'data_inicio' => ['required', 'date'],
+            'data_fim' => ['required', 'date', 'after_or_equal:data_inicio'],
         ]);
 
-        $query = FluxoCaixa::with('filial')
-            ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
+        $fluxos = FluxoCaixa::whereBetween('data_movimento', [
+                $request->data_inicio,
+                $request->data_fim,
+            ])
+            ->orderBy('data_movimento')
+            ->get();
 
-        if ($request->idfilial) {
-            $query->where('idfilial', $request->idfilial);
-        }
+        $totalEntrada = $fluxos->where('tipo', 'ENTRADA')->sum('valor');
+        $totalSaida   = $fluxos->where('tipo', 'SAIDA')->sum('valor');
+        $saldoFinal   = $totalEntrada - $totalSaida;
 
-        $lancamentos = $query->orderBy('dataregistro')->get();
-        
-        $filiais = Filial::all();
-
-        return view('fluxocaixa.relatorio', compact('lancamentos', 'filiais', 'request'));
+        return view('fluxocaixa.relatorio_resultado', compact(
+            'fluxos', 'totalEntrada', 'totalSaida', 'saldoFinal'
+        ));
     }
 
-    // 📄 Gerar PDF
-    public function gerarPdf(Request $request)
-    {
-        $request->validate([
-            'idfilial' => 'nullable|exists:filiais,id',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date|after_or_equal:data_inicio',
-        ]);
+    /**
+     * Gera um PDF com os dados do relatório.
+     */
+public function gerarPdf(Request $request)
+{
+    $request->validate([
+        'data_inicio' => ['required', 'date'],
+        'data_fim' => ['required', 'date', 'after_or_equal:data_inicio'],
+    ]);
 
-        $query = FluxoCaixa::with('filial')
-            ->whereBetween('dataregistro', [$request->data_inicio, $request->data_fim]);
+    $dataInicio = $request->data_inicio;
+    $dataFim = $request->data_fim;
+    $idfilial = $request->idfilial;
 
-        if ($request->idfilial) {
-            $query->where('idfilial', $request->idfilial);
-        }
+    $query = FluxoCaixa::whereBetween('data_movimento', [$dataInicio, $dataFim]);
 
-        $lancamentos = $query->get();
-
-        $pdf = PDF::loadView('fluxocaixa.relatorio_pdf', compact('lancamentos', 'request'));
-        return $pdf->download('relatorio_fluxo_caixa.pdf');
+    if ($idfilial) {
+        $query->where('filial_id', $idfilial);
+        $filial = \App\Models\Filial::find($idfilial);
+    } else {
+        $filial = null;
     }
 
-    // 📊 Gerar Excel
-    public function gerarExcel(Request $request)
-    {
-        $request->validate([
-            'idfilial' => 'nullable|exists:filiais,id',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date|after_or_equal:data_inicio',
-        ]);
+    $fluxos = $query->orderBy('data_movimento')->get();
 
-        return Excel::download(new FluxoCaixaExport($request), 'relatorio_fluxo_caixa.xlsx');
-    }
-     public function verificaCaixaAberto(Request $request)
-    {
-        $request->validate([
-            'iduser' => 'required|integer',
-        ]);
+    $totalEntrada = $fluxos->where('tipo', 'ENTRADA')->sum('valor');
+    $totalSaida   = $fluxos->where('tipo', 'SAIDA')->sum('valor');
+    $saldoFinal   = $totalEntrada - $totalSaida;
 
-        $caixaAberto = DB::table('caixa_header')
-            ->where('iduser', $request->iduser)
-            ->whereNull('datahora_fechamento')
-            ->exists();
+    $pdf = PDF::loadView('fluxocaixa.relatorio_pdf', [
+        'lancamentos' => $fluxos,
+        'totalEntrada' => $totalEntrada,
+        'totalSaida' => $totalSaida,
+        'saldoFinal' => $saldoFinal,
+        'dataInicio' => $dataInicio,
+        'dataFim' => $dataFim,
+        'filial' => $filial,
+    ]);
 
-        return response()->json(['caixa_aberto' => $caixaAberto]);
-    }
+    return $pdf->download('relatorio_fluxo_caixa.pdf');
+}
+
+
 
 }

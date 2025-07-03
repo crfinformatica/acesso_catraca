@@ -1,13 +1,26 @@
-@extends('adminlte::page')
+@extends('layouts.app')
 
-@section('title', 'Formas de Pagamento')
-
-@section('content_header')
-    <h1>Formas de Pagamento</h1>
-@endsection
+@section('title', 'Produtos')
 
 @section('content')
-    <a href="{{ route('formapagamento.create') }}" class="btn btn-success mb-3">Nova Forma</a>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Forma de Pagamento</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+          <li class="breadcrumb-item active">Forma de Pagamento</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="{{ route('formapagamento.create') }}" class="btn btn-success mb-3">Nova Forma de pagamento</a>
+
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

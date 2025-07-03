@@ -1,13 +1,25 @@
-@extends('adminlte::page')
+@extends('layouts.app')
 
-@section('title', 'Filiais')
-
-@section('content_header')
-    <h1>Filiais</h1>
-@stop
+@section('title', 'Produtos')
 
 @section('content')
-    <a href="{{ route('filiais.create') }}" class="btn btn-primary mb-3">Nova Filial</a>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Filiais</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+          <li class="breadcrumb-item active">Filiais</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="{{ route('filiais.create') }}" class="btn btn-success mb-3">Nova Filial</a>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
