@@ -55,9 +55,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Forma de pagamento
-    Route::get('/forma-pagamento', [FormaPagamentoController::class, 'index'])->name('forma-pagamento.index');
+    Route::get('/formapagamento', [FormaPagamentoController::class, 'index'])->name('formapagamento.index');
     Route::get('/formapagamento/edit', [FormaPagamentoController::class, 'edit'])->name('formapagamento.edit');
-    Route::get('/formapagamento/create', [FormaPagamentoController::class, 'create'])->name('formapagamento.create');
     Route::get('/formapagamento/create', [FormaPagamentoController::class, 'create'])->name('formapagamento.create');
     Route::get('/formapagamento/destroy', [FormaPagamentoController::class, 'destroy'])->name('formapagamento.destroy');
     
