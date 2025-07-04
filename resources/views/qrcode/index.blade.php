@@ -56,15 +56,14 @@
   .card-laranja {
     border-top: 4px solidrgb(156, 69, 28);
   }
+
   .card-laranja .card-header {
     background-color: #2757a4;
     color: #fff;
   }
-
-
 </style>
 
-<body class="hold-transition sidebar-mini layout-fixed" >
+<body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
     <!-- Preloader -->
@@ -97,7 +96,7 @@
           <div class="navbar-search-block">
             <form class="form-inline">
               <div class="input-group input-group-sm">
-                <input class="form-control form-control-navbar"  type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
                   <button class="btn btn-navbar" type="submit">
                     <i class="fas fa-search"></i>
@@ -135,366 +134,366 @@
         </div>
 
         <!-- SidebarSearch Form -->
-            <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-              <input class="form-control form-control-sidebar bg-white text-dark" 
-                    type="search" placeholder="Buscar" aria-label="Buscar"
-                    style="border: 1px solid #ccc;">
-              <div class="input-group-append">
+        <div class="form-inline">
+          <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar bg-white text-dark"
+              type="search" placeholder="Buscar" aria-label="Buscar"
+              style="border: 1px solid #ccc;">
+            <div class="input-group-append">
               <button class="btn btn-sidebar bg-white text-primary" style="border: 1px solid #ccc;">
-            <i class="fas fa-search fa-fw"></i>
-          </button>
+                <i class="fas fa-search fa-fw"></i>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-  <!-- Include Menu -->
+        <!-- Include Menu -->
         @include('layouts.menu')
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
           <!-- Content Header (Page header) -->
-      
+
 
           {{-- ↓↓↓ AQUI COMEÇA O BLOCO DE GUARDA VOLUME ↓↓↓ --}}
           <!-- <div class="card   card-laranja mb-4"> -->
-            <div class="card-header">
-              <!-- <h3 class="card-title">Guarda Volume - Consulta</h3> -->
-            </div>
-            <div class="card-body">
-              @if(session('error'))
-              <div class="alert alert-danger">{{ session('error') }}</div>
-              @endif
-              {{-- Formulário de busca estilo PDV --}}
-              <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                  <form method="POST" action="{{ route('guarda_volume.buscar') }}">
-                    @csrf
-                    <div class="input-group input-group-lg">
-                      <span class="input-group-text bg-white">
-                        <i class="fas fa-qrcode text-primary"></i>
-                      </span>
-                      <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
+          <div class="card-header">
+            <!-- <h3 class="card-title">Guarda Volume - Consulta</h3> -->
+          </div>
+          <div class="card-body">
+            @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            {{-- Formulário de busca estilo PDV --}}
+            <div class="card mb-4 shadow-sm">
+              <div class="card-body">
+                <form method="POST" action="{{ route('guarda_volume.buscar') }}">
+                  @csrf
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-white">
+                      <i class="fas fa-qrcode text-primary"></i>
+                    </span>
+                    <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
 
-                      <input type="text"
-                        id="codigo_qrcode"
-                        name="codigo_qrcode"
-                        class="form-control form-control-lg border-primary"
-                        placeholder="Escaneie ou digite o QR Code"
-                        required autofocus
-                        style="font-size: 1.5rem;">
+                    <input type="text"
+                      id="codigo_qrcode"
+                      name="codigo_qrcode"
+                      class="form-control form-control-lg border-primary"
+                      placeholder="Escaneie ou digite o QR Code"
+                      required autofocus
+                      style="font-size: 1.5rem;">
 
-                      <!-- <div class="input-group-append">
+                    <!-- <div class="input-group-append">
                         <button class="btn btn-primary btn-lg px-4" type="submit" style="font-size: 1.3rem;">
                           <i class="fas fa-search"></i> Buscar registro
                         </button>
                       </div> -->
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <div class="text-end my-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
-                  <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
-                </button>
-              </div>
-
-              {{-- Tabela de QR Codes --}}
-              <div class="table-responsive">
-                <table id="example1" class="table table-bordered table-hover text-center align-middle">
-                  <thead class="table-light" style="color: #fff; background-color: #2757a4">
-                    <tr>
-                      <th>QR Code</th>
-                      <th>Cliente</th>
-                      <th>Valor</th>
-                      <th>Produto</th>
-                      <th>Status</th>
-                      <th>Gerado por</th>
-                      <th>Data de Uso</th>
-                      <th>Ação</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($qrcodes as $qr)
-                    <tr>
-                      <td>
-                        <div style="margin: 10px 0;">
-                          {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-                        </div>
-
-                        {{-- Conteúdo oculto para impressão --}}
-                        <div id="qrcode-{{ $qr->id }}" style="display: none;">
-                          <div style="text-align: center; font-family: Arial, sans-serif;">
-                            <h2 style="margin: 0;">Mesquita Soluções Empresariais</h2>
-                            <p style="margin: 0;">CNPJ: 17.105.516/0001-01</p>
-                            <div style="margin: 20px 0;">
-                              {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
-                            </div>
-                            <p><strong>Código:</strong> {{ $qr->id }}</p>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td>{{ $qr->cliente->nome ?? 'Geral' }}</td>
-
-                      <td>
-                        @if (empty($qr->caixaItem->valorapagar))
-                        <span class="badge bg-danger">Pendente</span>
-                        @else
-                        R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
-                        @endif
-                      </td>
-
-                      <td>{{ $qr->produto->descricao ?? '---' }}</td>
-
-                      <td>
-                        @if ($qr->used_at)
-                        <span class="badge bg-danger">Usado</span>
-                        @else
-                        <span class="badge bg-success">Disponível</span>
-                        @endif
-                      </td>
-
-                      <td>{{ $qr->user->name ?? '---' }}</td>
-
-                      <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
-
-                      <td>
-                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
-                          <i class="bi bi-eye"></i> Ver Cliente
-                        </button>
-                        <button class="btn btn-primary btn-sm" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
-                          <i class="bi bi-printer"></i> Imprimir QRcode
-                        </button>
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
-                </table>
-              </div>
-
-  <!-- Modal para finalizar venda -->
-    @if(session('guardaVolume'))
-<!-- Modal: Finalizar Pagamento -->
-<div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form method="POST" action="{{ route('guarda.finalizar') }}">
-      @csrf
-      <input type="hidden" name="qrcode_id" value="{{ session('guardaVolume')->id }}">
-      <input type="hidden" name="valor_base" value="{{ session('valorAPagar') }}">
-
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-
-        <div class="modal-body">
-          <div class="mb-2"><strong>Cliente:</strong> {{ session('guardaVolume')->cliente->nome ?? '---' }}</div>
-          <div class="mb-2"><strong>Pertence:</strong> {{ session('guardaVolume')->descricao ?? '---' }}</div>
-          <div class="mb-2"><strong>Tempo:</strong> {{ session('tempoGuardado') ?? '---' }} h</div>
-          <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format(session('valorAPagar') ?? 0, 2, ',', '.') }}</div>
-
-          <div class="mb-3">
-            <label for="desconto" class="form-label">Desconto (R$)</label>
-            <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
-          </div>
-
-          <div class="mb-3">
-            <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
-            <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
-          </div>
-
-          <div class="mb-3">
-          <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
-          <select name="formadepagamento" id="formadepagamento" class="form-control" required>
-            <option value="" disabled selected>Escolha a forma</option>
-            @foreach($formasPagamentos as $forma)
-              <option value="{{ $forma->descricao }}">{{ $forma->descricao }}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-@endif
-
-@if(session('abrir_modal'))
-<script>
-  window.onload = function () {
-    var modal = new bootstrap.Modal(document.getElementById('modalFinalizar'));
-    modal.show();
-  };
-</script>
-@endif
-<!-- Fim Modal finalizar venda com js-->
-
-
-              <!-- Modal: Abrir Caixa -->
-              <div class="modal fade" id="modalAbrirCaixa" tabindex="-1" aria-labelledby="modalAbrirCaixaLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <form id="formAbrirCaixa">
-                    @csrf
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title">Abrir Caixa</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="mb-3">
-                          <label for="valor_inicial">Valor Inicial</label>
-                          <input type="number" step="0.01" class="form-control" name="valor_inicial" id="valor_inicial" required>
-                        </div>
-
-                        <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
-                        <input type="hidden" id="idFilialCaixa" value="{{ auth()->user()->idfilial ?? 1 }}">
-                      </div>
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Abrir Caixa</button>
-                      </div>
-                    </div>
-                  </form>
-
-                </div>
-              </div>
-              <!-- Modal -->
-              <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <form method="POST" action="{{ route('qrcode.gerar') }}">
-                    @csrf
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title">Gerar QR Code para Produto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
-                      </div>
-                      <div class="modal-body">
-
-                        <!-- Produto -->
-                        <div class="mb-3">
-                          <label for="produto_id" class="form-label">Produto</label>
-                          <select name="produto_id" id="produto_id" class="form-control" required>
-                            <option value="" disabled selected>Escolha um produto</option>
-                            @foreach ($produtos as $produto)
-                            <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}"
-                              data-descricao="{{ $produto->descricao }}">
-                              {{ $produto->descricao }}
-                            </option>
-                            @endforeach
-                          </select>
-                        </div>
-                        <!-- Valor -->
-                        <div class="mb-3">
-                          <label for="valor_produto" class="form-label">Valor do Produto</label>
-                          <input type="text" id="valor_produto" class="form-control" readonly>
-                        </div>
-
-                        <!-- Campos do cliente e descrição -->
-                        <div id="dados-cliente" style="display: none;">
-                          <hr>
-                          <h6>Dados do Cliente</h6>
-                          <div class="mb-3">
-                            <label for="nome" class="form-label">Nome</label>
-                            <input type="text" name="nome" id="nome" class="form-control">
-                          </div>
-                          <div class="mb-3">
-                            <label for="cpf" class="form-label">CPF</label>
-                            <input type="text" name="cpf" id="cpf" class="form-control">
-                          </div>
-                          <div class="mb-3">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input type="email" name="email" id="email" class="form-control">
-                          </div>
-                          <div class="mb-3">
-                            <label for="telefone" class="form-label">Telefone</label>
-                            <input type="text" name="telefone" id="telefone" class="form-control">
-                          </div>
-                          <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição do Pertence</label>
-                            <input type="text" name="descricao" id="descricao" class="form-control">
-                          </div>
-                        </div>
-
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-success">Gerar QR Code</button>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                      </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </div>
             </div>
 
-            <!-- Modal caixa aberto -->
-            <div class="modal fade" id="modalQrCode" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-body text-center">
-                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(auth()->user()->id) !!}
-                  </div>
-                </div>
-              </div>
+            <div class="text-end my-3">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQrCode">
+                <i class="bi bi-plus-circle"></i> Gerar Novo QR Code
+              </button>
             </div>
 
-
-            <!-- Modal visualizar cliente -->
-            @foreach ($qrcodes as $qr)
-            <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
-              aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
-                    <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
-                    <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
-                    <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
-                    <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+            {{-- Tabela de QR Codes --}}
+            <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-light" style="color: #fff; background-color: #2757a4">
+                  <tr>
+                    <th>QR Code</th>
+                    <th>Cliente</th>
+                    <th>Valor</th>
+                    <th>Produto</th>
+                    <th>Status</th>
+                    <th>Gerado por</th>
+                    <th>Data de Uso</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($qrcodes as $qr)
+                  <tr>
                     <td>
-                      <span><strong>Qrcode:</strong></span>
-                      @if ($qr->used_at)
-                      <span class="badge badge-danger">Usado</span>
+                      <div style="margin: 10px 0;">
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+                      </div>
+
+                      {{-- Conteúdo oculto para impressão --}}
+                      <div id="qrcode-{{ $qr->id }}" style="display: none;">
+                        <div style="text-align: center; font-family: Arial, sans-serif;">
+                          <h2 style="margin: 0;">Mesquita Soluções Empresariais</h2>
+                          <p style="margin: 0;">CNPJ: 17.105.516/0001-01</p>
+                          <div style="margin: 20px 0;">
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate($qr->code) !!}
+                          </div>
+                          <p><strong>Código:</strong> {{ $qr->id }}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>{{ $qr->cliente->nome ?? 'Geral' }}</td>
+
+                    <td>
+                      @if (empty($qr->caixaItem->valorapagar))
+                      <span class="badge bg-danger">Pendente</span>
                       @else
-                      <span class="badge badge-success">Disponível</span>
+                      R$ {{ number_format($qr->caixaItem->valorapagar, 2, ',', '.') }}
                       @endif
                     </td>
+
+                    <td>{{ $qr->produto->descricao ?? '---' }}</td>
+
+                    <td>
+                      @if ($qr->used_at)
+                      <span class="badge bg-danger">Usado</span>
+                      @else
+                      <span class="badge bg-success">Disponível</span>
+                      @endif
+                    </td>
+
+                    <td>{{ $qr->user->name ?? '---' }}</td>
+
+                    <td>{{ $qr->used_at ? \Carbon\Carbon::parse($qr->used_at)->format('d/m/Y H:i') : '---' }}</td>
+
+                    <td>
+                      <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente{{ $qr->id }}">
+                        <i class="bi bi-eye"></i> Ver Cliente
+                      </button>
+                      <button class="btn btn-primary btn-sm" onclick="imprimirQRCode('qrcode-{{ $qr->id }}')">
+                        <i class="bi bi-printer"></i> Imprimir QRcode
+                      </button>
+                    </td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Modal para finalizar venda -->
+            @if(session('guardaVolume'))
+            <!-- Modal: Finalizar Pagamento -->
+            <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-labelledby="modalFinalizarLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <form method="POST" action="{{ route('guarda.finalizar') }}">
+                  @csrf
+                  <input type="hidden" name="qrcode_id" value="{{ session('guardaVolume')->id }}">
+                  <input type="hidden" name="valor_base" value="{{ session('valorAPagar') }}">
+
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalFinalizarLabel">Finalizar Pagamento</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="mb-2"><strong>Cliente:</strong> {{ session('guardaVolume')->cliente->nome ?? '---' }}</div>
+                      <div class="mb-2"><strong>Pertence:</strong> {{ session('guardaVolume')->descricao ?? '---' }}</div>
+                      <div class="mb-2"><strong>Tempo:</strong> {{ session('tempoGuardado') ?? '---' }} h</div>
+                      <div class="mb-3"><strong>Valor base:</strong> R$ {{ number_format(session('valorAPagar') ?? 0, 2, ',', '.') }}</div>
+
+                      <div class="mb-3">
+                        <label for="desconto" class="form-label">Desconto (R$)</label>
+                        <input type="number" step="0.01" name="desconto" id="desconto" class="form-control" value="0">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="acrescimo" class="form-label">Acréscimo (R$)</label>
+                        <input type="number" step="0.01" name="acrescimo" id="acrescimo" class="form-control" value="0">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="formadepagamento" class="form-label">Forma de Pagamento</label>
+                        <select name="formadepagamento" id="formadepagamento" class="form-control" required>
+                          <option value="" disabled selected>Escolha a forma</option>
+                          @foreach($formasPagamentos as $forma)
+                          <option value="{{ $forma->descricao }}">{{ $forma->descricao }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </form>
+              </div>
+            </div>
+            @endif
+
+            @if(session('abrir_modal'))
+            <script>
+              window.onload = function() {
+                var modal = new bootstrap.Modal(document.getElementById('modalFinalizar'));
+                modal.show();
+              };
+            </script>
+            @endif
+            <!-- Fim Modal finalizar venda com js-->
+
+
+            <!-- Modal: Abrir Caixa -->
+            <div class="modal fade" id="modalAbrirCaixa" tabindex="-1" aria-labelledby="modalAbrirCaixaLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <form id="formAbrirCaixa">
+                  @csrf
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Abrir Caixa</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label for="valor_inicial">Valor Inicial</label>
+                        <input type="number" step="0.01" class="form-control" name="valor_inicial" id="valor_inicial" required>
+                      </div>
+
+                      <input type="hidden" id="idUserCaixa" value="{{ Auth::user()->id }}">
+                      <input type="hidden" id="idFilialCaixa" value="{{ auth()->user()->idfilial ?? 1 }}">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Abrir Caixa</button>
+                    </div>
                   </div>
+                </form>
+
+              </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="modalQrCode" tabindex="-1" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <form method="POST" action="{{ route('qrcode.gerar') }}">
+                  @csrf
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Gerar QR Code para Produto</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">X</button>
+                    </div>
+                    <div class="modal-body">
+
+                      <!-- Produto -->
+                      <div class="mb-3">
+                        <label for="produto_id" class="form-label">Produto</label>
+                        <select name="produto_id" id="produto_id" class="form-control" required>
+                          <option value="" disabled selected>Escolha um produto</option>
+                          @foreach ($produtos as $produto)
+                          <option value="{{ $produto->idproduto }}" data-valor="{{ $produto->valor }}"
+                            data-descricao="{{ $produto->descricao }}">
+                            {{ $produto->descricao }}
+                          </option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <!-- Valor -->
+                      <div class="mb-3">
+                        <label for="valor_produto" class="form-label">Valor do Produto</label>
+                        <input type="text" id="valor_produto" class="form-control" readonly>
+                      </div>
+
+                      <!-- Campos do cliente e descrição -->
+                      <div id="dados-cliente" style="display: none;">
+                        <hr>
+                        <h6>Dados do Cliente</h6>
+                        <div class="mb-3">
+                          <label for="nome" class="form-label">Nome</label>
+                          <input type="text" name="nome" id="nome" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                          <label for="cpf" class="form-label">CPF</label>
+                          <input type="text" name="cpf" id="cpf" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                          <label for="email" class="form-label">E-mail</label>
+                          <input type="email" name="email" id="email" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                          <label for="telefone" class="form-label">Telefone</label>
+                          <input type="text" name="telefone" id="telefone" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                          <label for="descricao" class="form-label">Descrição do Pertence</label>
+                          <input type="text" name="descricao" id="descricao" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Gerar QR Code</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal caixa aberto -->
+          <div class="modal fade" id="modalQrCode" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-body text-center">
+                  {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate(auth()->user()->id) !!}
                 </div>
               </div>
             </div>
-            @endforeach
-            <!-- right col -->
           </div>
-          <!-- /.row (main row) -->
-        </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="#">Mesquita</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-          <b>Version</b> 3.2.0
-        </div>
-      </footer>
 
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-      </aside>
-      <!-- /.control-sidebar -->
+
+          <!-- Modal visualizar cliente -->
+          @foreach ($qrcodes as $qr)
+          <div class="modal fade" id="modalCliente{{ $qr->id }}" tabindex="-1" aria-labelledby="modalClienteLabel{{ $qr->id }}"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalClienteLabel{{ $qr->id }}">Informações do Cliente</h5>
+                </div>
+                <div class="modal-body">
+                  <p><strong>Nome:</strong> {{ $qr->cliente->nome ?? '---' }}</p>
+                  <p><strong>CPF:</strong> {{ $qr->cliente->cpf ?? '---' }}</p>
+                  <p><strong>E-mail:</strong> {{ $qr->cliente->email ?? '---' }}</p>
+                  <p><strong>Telefone:</strong> {{ $qr->cliente->telefone ?? '---' }}</p>
+                  <p><strong>Pertences:</strong> {{ $qr->descricao ?? '---' }}</p>
+                  <td>
+                    <span><strong>Qrcode:</strong></span>
+                    @if ($qr->used_at)
+                    <span class="badge badge-danger">Usado</span>
+                    @else
+                    <span class="badge badge-success">Disponível</span>
+                    @endif
+                  </td>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          @endforeach
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2014-2021 <a href="#">Mesquita</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.2.0
+    </div>
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
   </div>
 
   <script>
@@ -675,7 +674,7 @@
         .then(data => {
           if (!data.caixa_aberto) {
             alert('Você não tem um caixa aberto.');
-          
+
             // Exibe o modal para preenchimento do valor inicial
             const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
             modal.show();
@@ -687,162 +686,177 @@
         });
     });
 
-document.getElementById('formAbrirCaixa').addEventListener('submit', function (e) {
-  e.preventDefault(); // Impede envio tradicional
+    document.getElementById('formAbrirCaixa').addEventListener('submit', function(e) {
+      e.preventDefault(); // Impede envio tradicional
 
-  const iduser = document.getElementById('idUserCaixa').value;
-  const idfilial = document.getElementById('idFilialCaixa').value;
-  const valor_inicial = document.getElementById('valor_inicial').value;
+      const iduser = document.getElementById('idUserCaixa').value;
+      const idfilial = document.getElementById('idFilialCaixa').value;
+      const valor_inicial = document.getElementById('valor_inicial').value;
 
-  fetch('/abrir-caixa', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify({ iduser, idfilial, valor_inicial })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert('Caixa aberto com sucesso! ID: ' + data.id);
-      // Fecha o modal
-      const modal = bootstrap.Modal.getInstance(document.getElementById('modalAbrirCaixa'));
-      modal.hide();
-    } else {
-      alert('Erro ao abrir caixa: ' + (data.message || 'Desconhecido'));
-    }
-  })
-  .catch(err => {
-    console.error('Erro ao abrir caixa:', err);
-    alert('Erro ao abrir caixa. Veja o console.');
-  });
-});
-
-    
+      fetch('/abrir-caixa', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            iduser,
+            idfilial,
+            valor_inicial
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert('Caixa aberto com sucesso! ID: ' + data.id);
+            // Fecha o modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAbrirCaixa'));
+            modal.hide();
+          } else {
+            alert('Erro ao abrir caixa: ' + (data.message || 'Desconhecido'));
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao abrir caixa:', err);
+          alert('Erro ao abrir caixa. Veja o console.');
+        });
+    });
   </script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const iduser = document.getElementById('idUserCaixa').value;
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const iduser = document.getElementById('idUserCaixa').value;
 
-  // Verifica se existe caixa aberto há mais de 24h
-  fetch('/verifica-caixa-antigo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify({ iduser })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === 'erro') {
-      //alert(data.mensagem);
-    } else {
-      // Se não houver caixa antigo, verifica se existe algum caixa aberto
-      fetch('/verifica-caixa-aberto', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ iduser })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.caixa_aberto) {
-          const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
-          modal.show();
-        }
-      })
-      .catch(err => {
-        console.error('Erro ao verificar caixa aberto:', err);
-        alert('Erro ao verificar caixa aberto.');
+      // Verifica se existe caixa aberto há mais de 24h
+      fetch('/verifica-caixa-antigo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            iduser
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'erro') {
+            //alert(data.mensagem);
+          } else {
+            // Se não houver caixa antigo, verifica se existe algum caixa aberto
+            fetch('/verifica-caixa-aberto', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                  iduser
+                })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (!data.caixa_aberto) {
+                  const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
+                  modal.show();
+                }
+              })
+              .catch(err => {
+                console.error('Erro ao verificar caixa aberto:', err);
+                alert('Erro ao verificar caixa aberto.');
+              });
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao verificar caixa antigo:', err);
+          alert('Erro ao verificar caixa antigo.');
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const iduser = document.getElementById('idUserCaixa').value;
+
+      // Verifica caixa antigo aberto
+      fetch('/verifica-caixa-antigo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            iduser
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'erro') {
+            //alert(data.mensagem);
+            // Preenche o id do caixa aberto para fechar no modal
+            document.getElementById('caixaIdParaFechar').value = data.id_caixa;
+            // Abre o modal
+            const modal = new bootstrap.Modal(document.getElementById('modalFecharCaixa'));
+            modal.show();
+          }
+        })
+        .catch(console.error);
+
+      // Envio do formulário para fechar caixa
+      document.getElementById('formFecharCaixa').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const caixaId = document.getElementById('caixaIdParaFechar').value;
+
+        fetch(`/caixa/fechar/${caixaId}`, {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert('Caixa fechado com sucesso! Agora você pode abrir um novo caixa.');
+
+              // Esconde o modal de fechamento
+              const modalFechar = bootstrap.Modal.getInstance(document.getElementById('modalFecharCaixa'));
+              modalFechar.hide();
+
+              // Aguarda a animação do modal anterior e então abre o modal de abertura
+              setTimeout(() => {
+                const modalAbrir = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
+                modalAbrir.show();
+              }, 500); // 500ms é o tempo médio da transição do modal
+            } else {
+              alert('Erro ao fechar caixa: ' + (data.erro || 'Desconhecido'));
+            }
+
+          })
+          .catch(console.error);
       });
-    }
-  })
-  .catch(err => {
-    console.error('Erro ao verificar caixa antigo:', err);
-    alert('Erro ao verificar caixa antigo.');
-  });
-});
-document.addEventListener('DOMContentLoaded', function() {
-  const iduser = document.getElementById('idUserCaixa').value;
-
-  // Verifica caixa antigo aberto
-  fetch('/verifica-caixa-antigo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify({ iduser })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === 'erro') {
-      //alert(data.mensagem);
-      // Preenche o id do caixa aberto para fechar no modal
-      document.getElementById('caixaIdParaFechar').value = data.id_caixa;
-      // Abre o modal
-      const modal = new bootstrap.Modal(document.getElementById('modalFecharCaixa'));
-      modal.show();
-    }
-  })
-  .catch(console.error);
-
-  // Envio do formulário para fechar caixa
-  document.getElementById('formFecharCaixa').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const caixaId = document.getElementById('caixaIdParaFechar').value;
-
-    fetch(`/caixa/fechar/${caixaId}`, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({})
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.success) {
-        alert('Caixa fechado com sucesso! Agora você pode abrir um novo caixa.');
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalFecharCaixa'));
-        modal.hide();
-        // Aqui pode chamar a função para abrir modal de abrir caixa
-      } else {
-        alert('Erro ao fechar caixa: ' + (data.erro || 'Desconhecido'));
-      }
-    })
-    .catch(console.error);
-  });
-});
-
-</script>
-<!-- Modal para fechar caixa aberto de dia anterior -->
-<div class="modal fade" id="modalFecharCaixa" tabindex="-1" aria-labelledby="modalFecharCaixaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form id="formFecharCaixa">
-      @csrf
-      <input type="hidden" id="caixaIdParaFechar" name="caixa_id" value="">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalFecharCaixaLabel">Fechar Caixa Aberto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    });
+  </script>
+  <!-- Modal para fechar caixa aberto de dia anterior -->
+  <div class="modal fade" id="modalFecharCaixa" tabindex="-1" aria-labelledby="modalFecharCaixaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="formFecharCaixa">
+        @csrf
+        <input type="hidden" id="caixaIdParaFechar" name="caixa_id" value="">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalFecharCaixaLabel">Fechar Caixa Aberto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <p>Existe um caixa aberto de outro dia. Deseja fechá-lo agora?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Fechar Caixa</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
         </div>
-        <div class="modal-body">
-          <p>Existe um caixa aberto de outro dia. Deseja fechá-lo agora?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Fechar Caixa</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
