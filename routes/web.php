@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\FluxoCaixaController;
-use App\Models\FluxoCaixa;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\AcessoController;
@@ -13,6 +10,8 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\FormaPagamentoController;
 use App\Http\Controllers\GuardaVolumeController;
 use App\Http\Controllers\CaixaController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
 
 // ROTA DE LOGIN
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -30,9 +29,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pdv', [QRCodeController::class, 'pdv'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
     Route::get('/dashboard', [QRCodeController::class, 'dashboard'])->name('admin.dashboard');
+
+    // Rotas Caixa
     Route::post('/verifica-caixa-aberto', [CaixaController::class, 'verificaCaixaAberto'])->name('caixa.verifica');
+    Route::post('/verifica-caixa-antigo', [CaixaController::class, 'verificaCaixaAntigo'])->name('caixa.verifica.antigo');
     Route::post('/abrir-caixa', [CaixaController::class, 'abrirCaixa'])->name('caixa.abrir');
-    Route::post('/caixa/{id}/fechar', [CaixaController::class, 'fecharCaixa']);
+    Route::post('/caixa/fechar/{id}', [CaixaController::class, 'fecharCaixa'])->name('caixa.fechar');
 
     // Guarda Volume
     Route::post('/finalizarRetirada', [GuardaVolumeController::class, 'finalizarRetirada'])->name('guarda.finalizar');
@@ -54,12 +56,8 @@ Route::middleware(['auth'])->group(function () {
         return $response->json();
     });
 
-    // Forma de pagamento
-    Route::get('/formapagamento', [FormaPagamentoController::class, 'index'])->name('formapagamento.index');
-    Route::get('/formapagamento/edit', [FormaPagamentoController::class, 'edit'])->name('formapagamento.edit');
-    Route::get('/formapagamento/create', [FormaPagamentoController::class, 'create'])->name('formapagamento.create');
-    Route::get('/formapagamento/destroy', [FormaPagamentoController::class, 'destroy'])->name('formapagamento.destroy');
-    
+    // Forma de pagamento - usando resource para todas as rotas CRUD
+    Route::resource('formapagamento', FormaPagamentoController::class);
 
     // Cadastros
     Route::resource('filiais', FilialController::class);
@@ -67,9 +65,8 @@ Route::middleware(['auth'])->group(function () {
 
     // FLUXO DE CAIXA - excluindo método show para evitar erro
     Route::resource('fluxocaixa', FluxoCaixaController::class)->except(['show']);
-
     Route::get('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorio'])->name('fluxocaixa.relatorio');
     Route::post('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorioResultado'])->name('fluxocaixa.relatorio.resultado');
     Route::post('fluxocaixa/relatorio/pdf', [FluxoCaixaController::class, 'gerarPdf'])->name('fluxocaixa.relatorio.pdf');
     Route::post('fluxocaixa/relatorio/excel', [FluxoCaixaController::class, 'gerarExcel'])->name('fluxocaixa.relatorio.excel');
-}); // fechamento do grupo de rotas
+});

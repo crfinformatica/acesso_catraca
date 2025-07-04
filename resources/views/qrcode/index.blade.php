@@ -721,6 +721,128 @@ document.getElementById('formAbrirCaixa').addEventListener('submit', function (e
 
     
   </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const iduser = document.getElementById('idUserCaixa').value;
+
+  // Verifica se existe caixa aberto há mais de 24h
+  fetch('/verifica-caixa-antigo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify({ iduser })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'erro') {
+      //alert(data.mensagem);
+    } else {
+      // Se não houver caixa antigo, verifica se existe algum caixa aberto
+      fetch('/verifica-caixa-aberto', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ iduser })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.caixa_aberto) {
+          const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaixa'));
+          modal.show();
+        }
+      })
+      .catch(err => {
+        console.error('Erro ao verificar caixa aberto:', err);
+        alert('Erro ao verificar caixa aberto.');
+      });
+    }
+  })
+  .catch(err => {
+    console.error('Erro ao verificar caixa antigo:', err);
+    alert('Erro ao verificar caixa antigo.');
+  });
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const iduser = document.getElementById('idUserCaixa').value;
+
+  // Verifica caixa antigo aberto
+  fetch('/verifica-caixa-antigo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify({ iduser })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'erro') {
+      //alert(data.mensagem);
+      // Preenche o id do caixa aberto para fechar no modal
+      document.getElementById('caixaIdParaFechar').value = data.id_caixa;
+      // Abre o modal
+      const modal = new bootstrap.Modal(document.getElementById('modalFecharCaixa'));
+      modal.show();
+    }
+  })
+  .catch(console.error);
+
+  // Envio do formulário para fechar caixa
+  document.getElementById('formFecharCaixa').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const caixaId = document.getElementById('caixaIdParaFechar').value;
+
+    fetch(`/caixa/fechar/${caixaId}`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.success) {
+        alert('Caixa fechado com sucesso! Agora você pode abrir um novo caixa.');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalFecharCaixa'));
+        modal.hide();
+        // Aqui pode chamar a função para abrir modal de abrir caixa
+      } else {
+        alert('Erro ao fechar caixa: ' + (data.erro || 'Desconhecido'));
+      }
+    })
+    .catch(console.error);
+  });
+});
+
+</script>
+<!-- Modal para fechar caixa aberto de dia anterior -->
+<div class="modal fade" id="modalFecharCaixa" tabindex="-1" aria-labelledby="modalFecharCaixaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="formFecharCaixa">
+      @csrf
+      <input type="hidden" id="caixaIdParaFechar" name="caixa_id" value="">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalFecharCaixaLabel">Fechar Caixa Aberto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Existe um caixa aberto de outro dia. Deseja fechá-lo agora?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Fechar Caixa</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
