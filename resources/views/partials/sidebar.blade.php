@@ -11,7 +11,11 @@
         <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+        @auth
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+        @else
+          <a href="#" class="d-block">Visitante</a>
+        @endauth
       </div>
     </div>
 
@@ -26,6 +30,8 @@
       </div>
     </div>
 
-    @include('layouts.menu')
+    @auth
+      @include('layouts.menu')
+    @endauth
   </div>
 </aside>

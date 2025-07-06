@@ -1,42 +1,37 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\FluxoCaixa;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class FluxoCaixaExport implements FromCollection, WithHeadings
 {
-    protected $request;
+    protected $dataInicio;
+    protected $dataFim;
+    protected $idfilial;
 
-    public function __construct(Request $request)
+    public function __construct($dataInicio, $dataFim, $idfilial)
     {
-        $this->request = $request;
+        $this->dataInicio = $dataInicio;
+        $this->dataFim = $dataFim;
+        $this->idfilial = $idfilial;
     }
 
     public function collection()
     {
-        $query = FluxoCaixa::with('filial')
-            ->whereBetween('dataregistro', [$this->request->data_inicio, $this->request->data_fim]);
+        $query = FluxoCaixa::whereBetween('data_movimento', [$this->dataInicio, $this->dataFim]);
 
-        if ($this->request->idfilial) {
-            $query->where('idfilial', $this->request->idfilial);
+        if ($this->idfilial) {
+            $query->where('id_caixa', $this->idfilial);
         }
 
-        return $query->get()->map(function ($item) {
-            return [
-                $item->dataregistro,
-                $item->tipo,
-                $item->valor,
-                $item->filial->nomedafilial ?? '-',
-                $item->descricao,
-            ];
-        });
+        return $query->select('descricao', 'tipo', 'valor', 'data_movimento')->get();
     }
 
     public function headings(): array
     {
-        return ['Data', 'Tipo', 'Valor', 'Filial', 'Descrição'];
+        return ['Descrição', 'Tipo', 'Valor', 'Data'];
     }
 }

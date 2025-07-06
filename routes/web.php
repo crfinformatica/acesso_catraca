@@ -12,11 +12,13 @@ use App\Http\Controllers\GuardaVolumeController;
 use App\Http\Controllers\CaixaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\RelatorioVendasController;
 
 // ROTA DE LOGIN
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('login_validar', [LoginController::class, 'login_validar'])->name('login_validar');
-// ROTA INICIAL -> REDIRECIONAR PARA LOGIN
+
+// REDIRECIONAR RAIZ PARA LOGIN
 Route::redirect('/', '/login');
 
 // LOGOUT
@@ -25,7 +27,7 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // ROTAS PROTEGIDAS POR LOGIN
 Route::middleware(['auth'])->group(function () {
 
-    // Página inicial pós login
+    // PÁGINA INICIAL PÓS LOGIN
     Route::get('/pdv', [QRCodeController::class, 'pdv'])->name('qrcode.index');
     Route::post('/qrcode/gerar', [QRCodeController::class, 'gerar'])->name('qrcode.gerar');
     Route::get('/dashboard', [QRCodeController::class, 'dashboard'])->name('admin.dashboard');
@@ -56,17 +58,27 @@ Route::middleware(['auth'])->group(function () {
         return $response->json();
     });
 
-    // Forma de pagamento - usando resource para todas as rotas CRUD
+    // Forma de pagamento - CRUD completo via resource
     Route::resource('formapagamento', FormaPagamentoController::class);
 
-    // Cadastros
+    // Cadastros de filiais e produtos
     Route::resource('filiais', FilialController::class);
     Route::resource('produtos', ProdutoController::class);
 
-    // FLUXO DE CAIXA - excluindo método show para evitar erro
+    // Fluxo de Caixa - todas as rotas via resource (exceto show que você não usa)
     Route::resource('fluxocaixa', FluxoCaixaController::class)->except(['show']);
+
+    // Rotas adicionais para o relatório do fluxo de caixa
     Route::get('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorio'])->name('fluxocaixa.relatorio');
     Route::post('fluxocaixa/relatorio', [FluxoCaixaController::class, 'relatorioResultado'])->name('fluxocaixa.relatorio.resultado');
     Route::post('fluxocaixa/relatorio/pdf', [FluxoCaixaController::class, 'gerarPdf'])->name('fluxocaixa.relatorio.pdf');
     Route::post('fluxocaixa/relatorio/excel', [FluxoCaixaController::class, 'gerarExcel'])->name('fluxocaixa.relatorio.excel');
+    // relatorio de vendas
+    Route::middleware(['auth'])->group(function () {
+    // ...
+    Route::get('/relatorio-vendas', [RelatorioVendasController::class, 'index'])->name('relatorio.vendas');
+    Route::get('/relatorio-vendas/pdf', [RelatorioVendasController::class, 'pdf'])->name('relatorio.vendas.pdf');
+    Route::get('/relatorio-vendas/excel', [RelatorioVendasController::class, 'excel'])->name('relatorio.vendas.excel');
+});
+
 });

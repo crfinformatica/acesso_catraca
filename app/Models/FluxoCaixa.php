@@ -17,10 +17,11 @@ class FluxoCaixa extends Model
         'data_movimento',
         'formadepagamento',
         'id_caixa',
+        'filial_id', 
     ];
 
     protected $dates = [
-        'data_movimento',
+        'data_movimento'=> 'datetime',
         'created_at',
         'updated_at',
     ];
@@ -35,5 +36,10 @@ class FluxoCaixa extends Model
     public function caixa()
     {
         return $this->belongsTo(Caixa::class, 'id_caixa');
+    }
+    // Relacionamento com filial
+    public function filial()
+    {
+        return $this->belongsTo(Filial::class, 'idfilial');
     }
 }
